@@ -1,0 +1,7 @@
+{
+	"books": [
+		{"id": 1, "name": "별주부전", "description": "용왕이 거북이와 토끼를..."},
+		{"id": 2, "name": "홍길동전", "description": "아버지를 아버지라..."},
+		{"id": 3, "name": "춘향전", "description": "그네 타다 한눈에..."}
+	]
+}

@@ -35,4 +35,40 @@
 		console.log(result);
 	}
 	userMake();
+
+
+/* book.json 통신 */
+function getBooks(url, cb) {
+	var xhr = new XMLHttpRequest();
+	xhr.onreadystatechange = function() {
+		if(xhr.status == 200 && xhr.readyState == 4) {
+			cb(JSON.parse(xhr.responseText));
+		}
+	}
+	xhr.open("GET", url);
+	xhr.send();
+}
+
+//getBooks('/api/book.json', function(r) {	console.log(r); });
+
+
+function getBooks2(url) {
+	return new Promise(function(resolve, reject) {
+		var xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function(){
+			if(xhr.status == 200 && xhr.readyState == 4) {
+				var result = JSON.parse(xhr.responseText);
+				resolve(result);
+			}
+		}
+		xhr.open("GET", url);
+		xhr.send();
+	});
+}
+
+getBooks2('/api/book.json')
+.then(function(r){ console.log(r); })
+.catch(function(r){ console.log(r); })
+.finally(function(){ console.log("통신성공"); })
+
 </script>

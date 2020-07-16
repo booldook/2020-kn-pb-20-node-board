@@ -8,6 +8,7 @@ const { connect, mysqlErr } = require('./modules/mysql-conn');
 
 /*************** 절대경로 *****************/
 const publicPath = path.join(__dirname, './public');
+const jsonPath = path.join(__dirname, './json');
 const viewsPath = path.join(__dirname, './views');
 
 /*************** 라우터 *****************/
@@ -25,6 +26,7 @@ app.locals.headTitle = '노드 게시판';
 
 /*************** 라우터 세팅 *****************/
 app.use('/', express.static(publicPath));
+app.use('/api', express.static(jsonPath));
 app.use('/board', boardRouter);
 app.use('/member', memberRouter);
 app.get('/test', (req, res, next) => {
