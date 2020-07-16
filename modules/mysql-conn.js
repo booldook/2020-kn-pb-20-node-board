@@ -1,5 +1,5 @@
 const mysql = require('mysql2/promise');
-const connect = mysql.createPool({
+const pool = mysql.createPool({
 	host: 'localhost',
 	user: 'board',
 	password: '000000',
@@ -7,10 +7,11 @@ const connect = mysql.createPool({
 	waitForConnections: true,
 	connectionLimit: 10
 });
+
 const mysqlErr = (err) => {
 	const error = new Error();
 	error.msg = `[${err.code} / ${err.errno} / ${err.sqlState}] ${err.sqlMessage}`;
 	return error;
 }
 
-module.exports = { connect, mysqlErr };
+module.exports = { pool, mysqlErr };
