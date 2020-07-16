@@ -1,0 +1,13 @@
+doctype html
+html(lang="ko")
+	head
+		meta(charset='utf-8')
+		meta(name="viewport" content="width=device-width, initial-scale=1.0")
+		title= headTitle
+		link(rel="stylesheet" href="/css/base.css")
+	body
+		.wrapper(style="padding: 3rem; max-width:1200px; margin: auto;")
+			img(src=`/img/${code}.png` style="margin-bottom: 1rem; max-width: 120px;")
+			div(style="font-size: 2rem; color: #333; margin-bottom: 1rem;")= `${code} Error`
+			div(style="font-size: 1rem; color: #777; margin-bottom: 1rem;")= msg
+			a(href="/") 메인페이지로 돌아가기
