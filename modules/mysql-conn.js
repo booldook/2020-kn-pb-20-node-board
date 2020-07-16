@@ -5,5 +5,10 @@ const connect = mysql.createConnection({
 	password: '000000',
 	database: 'board'
 });
+const mysqlErr = (err) => {
+	const error = new Error();
+	error.msg = `[${err.code} / ${err.errno} / ${err.sqlState}] ${err.sqlMessage}`;
+	return error;
+}
 
-module.exports = connect;
+module.exports = { connect, mysqlErr };

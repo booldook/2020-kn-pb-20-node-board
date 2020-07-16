@@ -1,34 +1,38 @@
-<!DOCTYPE html>
-<html lang="ko">
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>회원가입</title>
-		<link rel="stylesheet" href="../css/all.min.css">
-		<link rel="stylesheet" href="../css/animate.css">
-		<link rel="stylesheet" href="../css/bootstrap.min.css">
-		<link rel="stylesheet" href="../css/base.css">
-		<link rel="stylesheet" href="../css/index.css">
-		<script src="../js/jquery-3.5.1.min.js"></script>
-		<script src="../js/bootstrap.bundle.min.js"></script>
-		<script src="../js/imagesloaded.pkgd.min.js"></script>
-	</head>
-	<body>
-		<div class="wrapper container">
-			<div class="jumbotron">
-				<h1>회원가입<small>- Express와 연동하는 회원가입 테스트</small></h1>
-				<hr>
-			</div>
-			<form action="/user/save" method="post">
-				<div class="form-inline">
-					<input type="text" class="form-control mr-2" name="userid" placeholder="아이디">
-					<input type="password" class="form-control mr-2" name="userpw" placeholder="패스워드">
-					<input type="text" class="form-control mr-2" name="username" placeholder="이름">
-					<input type="text" class="form-control mr-2" name="email" placeholder="이메일">
-					<button class="btn btn-primary">저장</button>
-				</div>
-			</form>
-		</div>
-		<script src="../js/index.js"></script>
-	</body>
-</html>
+<script>
+	/* 콜백 */
+	function nameView(fName, lName, cb) {
+		var fullName = lName + ' ' + fName;
+		cb(fullName);
+	}
+
+	nameView('길동', '홍', function(name) {
+		console.log(name);
+	});
+
+	/* Promise */
+	function nameViewPromise(fName, lName) {
+		return new Promise(function(resolve, reject) {
+			if(fName && lName) {
+				const fullName = lName + ' ' + fName;
+				resolve(fullName);
+			}
+			else {
+				reject('err');
+			}
+		});
+	}
+
+	nameViewPromise('길동', '홍')
+	.then(function(result) {
+		console.log(result);
+	})
+	.catch(function(err) {
+		console.log(err);
+	});
+
+	async function userMake() {
+		var result = await nameViewPromise('길순', '홍');
+		console.log(result);
+	}
+	userMake();
+</script>

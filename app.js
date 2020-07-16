@@ -4,7 +4,7 @@ const app = express();
 const path = require('path');
 
 /*************** 마이모듈 *****************/
-const connect = require('./modules/mysql-conn');
+const { connect, mysqlErr } = require('./modules/mysql-conn');
 
 /*************** 절대경로 *****************/
 const publicPath = path.join(__dirname, './public');
@@ -31,11 +31,7 @@ app.get('/test', (req, res, next) => {
 	let sql = 'INSERT INTO gbook SET writer=?, comment=?';
 	let sqlValue = ['홍길동2'];
 	connect.query(sql, sqlValue, (err, result) => {
-		if(err) {
-			const error = new Error();
-			error.msg = `[${err.code} / ${err.errno} / ${err.sqlState}] ${err.sqlMessage}`;
-			next(error);
-		}
+		if(err) next(mysqlErr(err));
 		else {
 			res.json(result);
 		}
