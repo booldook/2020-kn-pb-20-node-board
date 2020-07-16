@@ -3,6 +3,9 @@ const express = require('express');
 const app = express();
 const path = require('path');
 
+/*************** 마이모듈 *****************/
+const connect = require('./modules/mysql-conn');
+
 /*************** 절대경로 *****************/
 const publicPath = path.join(__dirname, './public');
 const viewsPath = path.join(__dirname, './views');
@@ -24,6 +27,20 @@ app.locals.headTitle = '노드 게시판';
 app.use('/', express.static(publicPath));
 app.use('/board', boardRouter);
 app.use('/member', memberRouter);
+app.get('/test', (req, res, next) => {
+	let sql = 'INSERT INTO gbook SET writer=?, comment=?';
+	let sqlValue = ['홍길동2'];
+	connect.query(sql, sqlValue, (err, result) => {
+		if(err) {
+			const error = new Error();
+			error.msg = `[${err.code} / ${err.errno} / ${err.sqlState}] ${err.sqlMessage}`;
+			next(error);
+		}
+		else {
+			res.json(result);
+		}
+	});
+});
 
 /*************** 오류 처리 *****************/
 app.use((req, res, next) => {
