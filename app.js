@@ -1,3 +1,29 @@
+/* 
+app.get('/test', (req, res, next) => {
+	let sql = 'INSERT INTO gbook SET writer=?, comment=?';
+	let sqlValue = ['홍길동2'];
+	connect.query(sql, sqlValue, (err, result) => {
+		if(err) next(mysqlErr(err));
+		else {
+			res.json(result);
+		}
+	});
+}); 
+
+app.get('/test', (req, res, next) => {
+	let sql = 'INSERT INTO gbook SET writer=?, comment=?';
+	let sqlValue = ['홍길동2'];
+	connect
+	.execute(sql, sqlValue)
+	.then((result) => {
+		res.json(result);
+	})
+	.catch((err) => {
+		next( mysqlErr(err) );
+	});
+}); 
+*/
+
 /*************** 외부모듈 *****************/
 const express = require('express');
 const app = express();
@@ -29,15 +55,17 @@ app.use('/', express.static(publicPath));
 app.use('/api', express.static(jsonPath));
 app.use('/board', boardRouter);
 app.use('/member', memberRouter);
-app.get('/test', (req, res, next) => {
-	let sql = 'INSERT INTO gbook SET writer=?, comment=?';
-	let sqlValue = ['홍길동2'];
-	connect.query(sql, sqlValue, (err, result) => {
-		if(err) next(mysqlErr(err));
-		else {
-			res.json(result);
-		}
-	});
+app.get('/test', async (req, res, next) => {
+	try {
+		let conn = await connect.getConnection();
+		let sql = 'INSERT INTO gbook SET writer=?, comment=?';
+		let sqlValue = ['홍길동4', '방문했어요~'];
+		let result = await conn.execute(sql, sqlValue);
+		res.json(result);
+	}
+	catch(err) {
+		next( mysqlErr(err) );
+	}
 });
 
 /*************** 오류 처리 *****************/
