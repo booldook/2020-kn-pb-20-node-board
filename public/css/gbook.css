@@ -7,5 +7,5 @@
 .header .navi {padding: 1.25rem 1rem; transition: all 0.5s;}
 .header .navi:hover {background-color: #706b54; color: #f8f8f8;}
 
-.title-wrap {padding: 2rem; background-color: #fdfcf6; border: 1px solid #fcf3d0; margin-top: 2rem;}
+.title-wrap {padding: 2rem; background-color: #fdfcf6; border: 1px solid #fcf3d0; margin: 2rem 0;}
 .title-wrap small {margin-left: 2rem; color: #888; font-size: 0.5em;}
