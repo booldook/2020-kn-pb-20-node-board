@@ -2,10 +2,10 @@
 const express = require('express');
 const app = express();
 const path = require('path');
+require('dotenv').config();
 
 /*************** 절대경로 *****************/
 const publicPath = path.join(__dirname, './public'); // 'c:\...\public'
-const jsonPath = path.join(__dirname, './json');
 const viewsPath = path.join(__dirname, './views');
 
 /*************** 라우터 *****************/
@@ -13,7 +13,9 @@ const boardRouter = require('./router/board');
 const memberRouter = require('./router/member');
 
 /*************** 서버실행 *****************/
-app.listen(3000, () => { console.log('http://127.0.0.1:3000') });
+app.listen(process.env.PORT, () => { 
+	console.log('http://127.0.0.1:' + process.env.PORT);
+});
 
 /*************** 뷰 엔진 *****************/
 app.set('view engine', 'pug');

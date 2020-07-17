@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/booldook/2020-kn-pb-20-node-board#readme",
   "dependencies": {
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "mysql2": "^2.1.0",
     "pug": "^3.0.0"
