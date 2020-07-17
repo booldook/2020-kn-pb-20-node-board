@@ -1,10 +1,39 @@
+/* 
+app.get('/test', (req, res, next) => {
+	let sql = 'INSERT INTO gbook SET writer=?, comment=?';
+	let sqlValue = ['홍길동2'];
+	connect.query(sql, sqlValue, (err, result) => {
+		if(err) next(mysqlErr(err));
+		else {
+			res.json(result);
+		}
+	});
+}); 
+
+app.get('/test', (req, res, next) => {
+	let sql = 'INSERT INTO gbook SET writer=?, comment=?';
+	let sqlValue = ['홍길동2'];
+	connect
+	.execute(sql, sqlValue)
+	.then((result) => {
+		res.json(result);
+	})
+	.catch((err) => {
+		next( mysqlErr(err) );
+	});
+}); 
+*/
+
 /*************** 외부모듈 *****************/
 const express = require('express');
 const app = express();
 const path = require('path');
 
+/*************** 마이모듈 *****************/
+const { pool, mysqlErr } = require('./modules/mysql-conn');
+
 /*************** 절대경로 *****************/
-const publicPath = path.join(__dirname, './public'); // 'c:\...\public'
+const publicPath = path.join(__dirname, './public');
 const jsonPath = path.join(__dirname, './json');
 const viewsPath = path.join(__dirname, './views');
 
@@ -21,14 +50,26 @@ app.set('views', viewsPath);
 app.locals.pretty = true;
 app.locals.headTitle = '노드 게시판';
 
-/***** AJAX/POST 데이터를 json으로 변경 ******/
-app.use(express.json());
-app.use(express.urlencoded({extended: false}));
-
 /*************** 라우터 세팅 *****************/
 app.use('/', express.static(publicPath));
+app.use('/api', express.static(jsonPath));
 app.use('/board', boardRouter);
 app.use('/member', memberRouter);
+app.get('/test', async (req, res, next) => {
+	try {
+		let sql = 'INSERT INTO gbook SET writer=?, comment=?';
+		let sql2 = 'SELECT * FROM gbook ORDER BY id DESC';
+		let sqlValue = ['홍길동4', '방문했어요~'];
+		let connect = await pool.getConnection();
+		let result = await connect.execute(sql, sqlValue);
+		let result2 = await connect.execute(sql2);
+		connect.release();
+		res.json(result2);
+	}
+	catch(err) {
+		next( mysqlErr(err) );
+	}
+});
 
 /*************** 오류 처리 *****************/
 app.use((req, res, next) => {
