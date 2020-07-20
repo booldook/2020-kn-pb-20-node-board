@@ -9,3 +9,7 @@
 
 .title-wrap {padding: 2rem; background-color: #fdfcf6; border: 1px solid #fcf3d0; margin: 2rem 0;}
 .title-wrap small {margin-left: 2rem; color: #888; font-size: 0.5em;}
+
+.list-wrapper th:nth-child(1) {width: 10%;}
+.list-wrapper th:nth-child(2) {width: 20%;}
+.list-wrapper th:nth-child(3) {width: 20%;}
