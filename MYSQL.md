@@ -75,6 +75,7 @@ SELECT * FROM users ORDER BY id DESC;
 SELECT * FROM users WHERE userid like 'b%' ORDER BY id DESC;
 SELECT * FROM gbook ORDER BY id DESC LIMIT 0, 10; -- LIMIT 시작레코드, 갯수
 SELECT * FROM gbook ORDER BY id DESC LIMIT 10, 10;
+SELECT COUNT(id) FROM gbook;
 ```
 
 3. Update

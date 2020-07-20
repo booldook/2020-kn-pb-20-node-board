@@ -15,14 +15,19 @@ router.get(['/', '/list', '/list/:page'], async (req, res, next) => {
 	let page = Number(req.params.page || 1); 
 	let cnt = Number(req.query.cnt || 5);
 	let stRec = (page - 1) * cnt;
+	let totalPage, lastPage;
 	try {
+		connect = await pool.getConnection();
+		sql = 'SELECT COUNT(id) FROM gbook';
+		result = await connect.execute(sql);
+		totalPage = result[0][0]['COUNT(id)'];
+		lastPage = Math.ceil(totalPage / cnt);
 		sql = 'SELECT * FROM gbook ORDER BY id DESC LIMIT ?, ?';
 		sqlVal = [stRec, cnt];
-		connect = await pool.getConnection();
 		result = await connect.execute(sql, sqlVal);
 		connect.release();
 		for(let v of result[0]) v.createdAt = moment(v.createdAt).format('YYYY-MM-DD hh:mm:ss');
-		const pug = { css: 'gbook', js: 'gbook', lists: result[0] };
+		const pug = { css: 'gbook', js: 'gbook', lists: result[0], lastPage };
 		res.render('gbook/gbook.pug', pug);
 	}
 	catch(e) {

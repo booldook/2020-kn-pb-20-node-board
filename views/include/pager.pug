@@ -1,13 +1,10 @@
-ul.pagination.mx-auto
+ul.pagination.justify-content-center
 	li.page-item
-		a.page-link(href="/gbook/list/1")
+		a.page-link.text-dark(href="/gbook/list/1")
 			span «
+	- for(let i=1; i<=lastPage; i++)
+		li.page-item
+			a.page-link.text-dark(href=`/gbook/list/${i}`)= i
 	li.page-item
-		a.page-link(href="#") 1
-	li.page-item
-		a.page-link(href="#") 2
-	li.page-item
-		a.page-link(href="#") 3
-	li.page-item
-		a.page-link(href="/gbook/list/")
+		a.page-link.text-dark(href=`/gbook/list/${lastPage}`)
 			span »
