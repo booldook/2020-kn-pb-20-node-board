@@ -13,3 +13,5 @@
 .list-wrapper th:nth-child(1) {width: 10%;}
 .list-wrapper th:nth-child(2) {width: 20%;}
 .list-wrapper th:nth-child(3) {width: 20%;}
+
+.page-item.active .page-link {color: #fff!important; background-color: #444; border-color: #222;}

@@ -1,10 +1,20 @@
 ul.pagination.justify-content-center
 	li.page-item
 		a.page-link.text-dark(href="/gbook/list/1")
-			span «
-	- for(let i=1; i<=pager.lastPage; i++)
-		li.page-item
-			a.page-link.text-dark(href=`/gbook/list/${i}`)= i
+			i.fa.fa-angle-double-left
+	li.page-item
+		a.page-link.text-dark(href=`/gbook/list/${pager.prev}`)
+			i.fa.fa-angle-left
+	- for(let i=pager.grpSt; i<=pager.grpEd; i++)
+		- if(i == pager.page)
+			li.page-item.active
+				a.page-link.text-dark(href=`/gbook/list/${i}`)= i
+		- else
+			li.page-item
+				a.page-link.text-dark(href=`/gbook/list/${i}`)= i
+	li.page-item
+		a.page-link.text-dark(href=`/gbook/list/${pager.next}`)
+			i.fa.fa-angle-right
 	li.page-item
 		a.page-link.text-dark(href=`/gbook/list/${pager.lastPage}`)
-			span »
+			i.fa.fa-angle-double-right

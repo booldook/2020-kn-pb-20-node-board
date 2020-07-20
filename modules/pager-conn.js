@@ -4,8 +4,11 @@ module.exports = (pager) => {
 	pager.grp = pager.grp || 3;				// 페이저 그룹 갯수 예: 3 => (1,2,3/4,5,6)
 	pager.stRec = (pager.page - 1) * pager.cnt;		// 페이지 리스트의 시작 Index 
 	pager.lastPage = Math.ceil(pager.totalRec / pager.cnt);		// 마지막 페이지(총 페이지 수)
-	pager.grpSt = 0;
-	pager.grpEd = 0;
+	pager.grpSt = Math.floor((pager.page - 1) / pager.grp) * pager.grp + 1;
+	pager.grpEd = pager.grpSt + pager.grp - 1;
+	pager.grpEd = (pager.grpEd > pager.lastPage) ? pager.lastPage : pager.grpEd;
+	pager.prev = (pager.page > 1) ? pager.page - 1 : 1;
+	pager.next = (pager.page < pager.lastPage) ? pager.page + 1 : pager.lastPage;
 
 	return pager;
 }
