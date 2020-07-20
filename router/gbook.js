@@ -18,6 +18,7 @@ router.get(['/', '/list', '/list/:page'], async (req, res, next) => {
 		sql = 'SELECT COUNT(id) FROM gbook';
 		result = await connect.execute(sql);
 		/******* pager.start ******/
+		pager.path = '/gbook/list';
 		pager.page = Number(req.params.page || 1); 
 		pager.cnt = Number(req.query.cnt || 5);
 		pager.grp = Number(req.query.grp || 3);
