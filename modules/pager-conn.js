@@ -1,6 +1,12 @@
 module.exports = (pager) => {
-	pager.stRec = (pager.page - 1) * pager.cnt;
-	pager.lastPage = Math.ceil(pager.totalRec / pager.cnt);
+	pager.page = pager.page || 1;			// 현재페이지
+	pager.cnt = pager.cnt || 5;				// 한페이지당 리스트 수
+	pager.grp = pager.grp || 3;				// 페이저 그룹 갯수 예: 3 => (1,2,3/4,5,6)
+	pager.stRec = (pager.page - 1) * pager.cnt;		// 페이지 리스트의 시작 Index 
+	pager.lastPage = Math.ceil(pager.totalRec / pager.cnt);		// 마지막 페이지(총 페이지 수)
+	pager.grpSt = 0;
+	pager.grpEd = 0;
+
 	return pager;
 }
 

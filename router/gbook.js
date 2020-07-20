@@ -20,9 +20,11 @@ router.get(['/', '/list', '/list/:page'], async (req, res, next) => {
 		/******* pager.start ******/
 		pager.page = Number(req.params.page || 1); 
 		pager.cnt = Number(req.query.cnt || 5);
+		pager.grp = Number(req.query.grp || 3);
 		pager.totalRec = result[0][0]['COUNT(id)'];
 		pager = pagerInit(pager);
-		/******* pager.end ******/
+		res.json(pager);
+		/*
 		sql = 'SELECT * FROM gbook ORDER BY id DESC LIMIT ?, ?';
 		sqlVal = [pager.stRec, pager.cnt];
 		result = await connect.execute(sql, sqlVal);
@@ -30,6 +32,7 @@ router.get(['/', '/list', '/list/:page'], async (req, res, next) => {
 		for(let v of result[0]) v.createdAt = moment(v.createdAt).format('YYYY-MM-DD hh:mm:ss');
 		const pug = { css: 'gbook', js: 'gbook', lists: result[0], pager };
 		res.render('gbook/gbook.pug', pug);
+		*/
 	}
 	catch(e) {
 		next(mysqlErr(e));
