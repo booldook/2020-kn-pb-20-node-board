@@ -12,18 +12,13 @@ const pagerInit = require('../modules/pager-conn');
 // 127.0.0.1:3000/gbook/list/3?cnt=10
 // console.log(page, cnt, stRec);
 router.get(['/', '/list', '/list/:page'], async (req, res, next) => {
-	let connect, sql, sqlVal, result, pager = {}; 
+	let connect, sql, sqlVal, result;
+	let pager = await pagerInit(req, 'gbook');
+	res.json(pager);
+	/* 
 	try {
 		connect = await pool.getConnection();
-		sql = 'SELECT COUNT(id) FROM gbook';
 		result = await connect.execute(sql);
-		/******* pager.start ******/
-		pager.path = '/gbook/list';
-		pager.page = Number(req.params.page || 1); 
-		pager.cnt = Number(req.query.cnt || 5);
-		pager.grp = Number(req.query.grp || 3);
-		pager.totalRec = result[0][0]['COUNT(id)'];
-		pager = pagerInit(pager);
 		sql = 'SELECT * FROM gbook ORDER BY id DESC LIMIT ?, ?';
 		sqlVal = [pager.stRec, pager.cnt];
 		result = await connect.execute(sql, sqlVal);
@@ -35,6 +30,7 @@ router.get(['/', '/list', '/list/:page'], async (req, res, next) => {
 	catch(e) {
 		next(mysqlErr(e));
 	}
+	*/
 });
 
 router.post('/save', async (req, res, next) => {
