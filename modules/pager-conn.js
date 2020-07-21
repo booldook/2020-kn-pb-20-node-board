@@ -1,12 +1,14 @@
 const { pool, mysqlErr } = require('./mysql-conn');
 
-module.exports = (req, tbName, where='WHERE 1') => {
+module.exports = (req, localPath, tbName, where='WHERE 1') => {
 	return new Promise(async (resolve, reject) => {
 		let sql, connect, result, pager = {};
 		try {
 			sql = `SELECT COUNT(*) FROM ${tbName} ${where}`;
 			connect = await pool.getConnection();
 			result = await connect.execute(sql);
+			connect.release();
+			pager.path = localPath;
 			pager.totalRec = result[0][0]['COUNT(*)'];
 			pager.page = Number(req.params.page || 1); 
 			pager.cnt = Number(req.query.cnt || 5);
