@@ -4,13 +4,16 @@ const app = express();
 const path = require('path');
 require('dotenv').config();
 
+/*************** 내부모듈 *****************/
+const navi = require('./modules/navi-conn');
+
 /*************** 절대경로 *****************/
 const publicPath = path.join(__dirname, './public'); // 'c:\...\public'
 const viewsPath = path.join(__dirname, './views');
 
 /*************** 라우터 *****************/
 const gbookRouter = require('./router/gbook');
-const gbookRouterV1 = require('./router/gbook-v1');
+const gbookRouterApi = require('./router/gbook-api');
 const boardRouter = require('./router/board');
 const memberRouter = require('./router/member');
 
@@ -24,16 +27,7 @@ app.set('view engine', 'pug');
 app.set('views', viewsPath);
 app.locals.pretty = true;
 app.locals.headTitle = '노드 게시판';
-app.locals.navis = [
-	{ name: '방명록.MySQL-v1', link: '/gbook/v1' },
-	{ name: '방명록.MySQL', link: '/gbook' },
-	{ name: '게시판.MySQL', link: '/board' },
-	{ name: '갤러리.Sequelize', link: '/gallery' },
-	{ name: '트위터.MongoDB', link: '/twitter' },
-	{ name: '회원가입.Passport', link: '/member/join' },
-	{ name: '로그인', link: '/member/login' },
-	{ name: '로그아웃', link: '/member/logout' }
-];
+app.locals.navis = navi;
 
 /***** AJAX/POST 데이터를 json으로 변경 ******/
 app.use(express.json());
@@ -42,7 +36,7 @@ app.use(express.urlencoded({extended: false}));
 /*************** 라우터 세팅 *****************/
 app.use('/', express.static(publicPath));
 app.use('/gbook', gbookRouter);
-app.use('/gbook/v1', gbookRouterV1);
+app.use('/gbook/api', gbookRouterApi);
 app.use('/board', boardRouter);
 app.use('/member', memberRouter);
 
