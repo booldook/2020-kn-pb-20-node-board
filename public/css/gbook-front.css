@@ -1,0 +1,17 @@
+.wrapper {max-width: 1200px; margin: auto;}
+
+.header {background-color: cornsilk; color: #444; display: flex; justify-content: space-between; align-items: center; padding: 0 1rem;}
+.header a, .header a:hover {color: inherit; text-decoration: none;}
+.header > .logo {font-size: 1.75rem;}
+.header > .navi-wrap {display: flex;}
+.header .navi {padding: 1.25rem 1rem; transition: all 0.5s;}
+.header .navi:hover {background-color: #706b54; color: #f8f8f8;}
+
+.title-wrap {padding: 2rem; background-color: #fdfcf6; border: 1px solid #fcf3d0; margin: 2rem 0;}
+.title-wrap small {margin-left: 2rem; color: #888; font-size: 0.5em;}
+
+.list-wrapper th:nth-child(1) {width: 10%;}
+.list-wrapper th:nth-child(2) {width: 20%;}
+.list-wrapper th:nth-child(3) {width: 20%;}
+
+.page-item.active .page-link {color: #fff!important; background-color: #444; border-color: #222;}

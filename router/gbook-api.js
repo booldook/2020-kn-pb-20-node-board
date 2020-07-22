@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { pool, mysqlErr } = require('../modules/mysql-conn');
-const moment = require('moment');
+const { pool } = require('../modules/mysql-conn');
 const pagerInit = require('../modules/pager-conn');
 
 router.get(['/', '/list', '/list/:page'], async (req, res, next) => {
