@@ -1,8 +1,7 @@
 init(1);
 function init(page) {
-	var sendData = { page: page }, html = '';
 	function onResponse(r) {
-		var $lists = $("tbody.lists");
+		var $lists = $("tbody.lists"), html = '';
 		if(r.code == 200) {
 			$lists.find('tr').css({"opacity": 0});
 			setTimeout(function(){
@@ -12,20 +11,20 @@ function init(page) {
 					html+= '<td>'+r.lists[i].id+'</td>';
 					html+= '<td>'+r.lists[i].writer+'</td>';
 					html+= '<td>'+r.lists[i].createdAt+'</td>';
-					html+= '<td>'+r.lists[i].comment+'</td>';
+					html+= '<td class="text-left">'+r.lists[i].comment+'</td>';
 					html+= '</tr>';
 					$lists.append(html);
 				}
 				setTimeout(function(){
 					$lists.find("tr").css({"opacity": 1});
 				}, 300);
-			}, ($lists.find("tr").length > 0) ? 600 : 0);
+			}, ($lists.find("tr").length > 0) ? ($lists.find("tr").length * 100 + 100) : 0);
 		}
 		else {
 			alert("통신오류가 발생하였습니다. 잠시 후 시도해 주세요.");
 		}
 	}
-	$.get('/gbook/api/list', sendData, onResponse);
+	$.get('/gbook/api/list/'+page, onResponse);
 }
 
 
