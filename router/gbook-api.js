@@ -5,7 +5,7 @@ const moment = require('moment');
 const pagerInit = require('../modules/pager-conn');
 
 router.get(['/', '/list', '/list/:page'], async (req, res, next) => {
-	let connect, sql, sqlVal, result, pager;
+	let connect, sql, sqlVal, result, pager, jsonResult;
 	try {
 		pager = await pagerInit(req, null, 'gbook');
 		connect = await pool.getConnection();
@@ -13,10 +13,11 @@ router.get(['/', '/list', '/list/:page'], async (req, res, next) => {
 		sqlVal = [pager.stRec, pager.cnt];
 		result = await connect.execute(sql, sqlVal);
 		connect.release();
-		res.json(result[0]);
+		jsonResult = { code: 200, pager, lists: result[0] };
+		res.json(jsonResult);
 	}
 	catch(e) {
-		next(mysqlErr(e));
+		next(e);
 	}
 });
 
@@ -28,11 +29,25 @@ router.post('/save', async (req, res, next) => {
 		sqlVal = [writer, comment];
 		connect = await pool.getConnection();
 		result = await connect.execute(sql, sqlVal);
-		res.redirect('/gbook');
+		res.json({ code: 200, result: result[0] });
 	}
 	catch(e) {
-		next(mysqlErr(e));
+		next(e);
 	}
+});
+
+/*************** 오류 처리 *****************/
+router.use((req, res, next) => {
+	const err = new Error();
+	err.code = 404;
+	err.msg = '요청하신 페이지를 찾을 수 없습니다.';
+	next(err);
+});
+
+router.use((error, req, res, next) => {
+	const code = error.code || 500;
+	const msg = error.msg || '서버 내부 오류 입니다. 관리자에게 문의하세요.';
+	res.json({ code, msg, error });
 });
 
 module.exports = router;
