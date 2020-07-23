@@ -3,6 +3,7 @@ function init(page) {
 	function onResponse(r) {
 		var $lists = $("tbody.lists"), html = '';
 		if(r.code == 200) {
+			pagerInit(r.pager);
 			$lists.find('tr').css({"opacity": 0});
 			setTimeout(function(){
 				$lists.empty();
@@ -27,6 +28,18 @@ function init(page) {
 	$.get('/gbook/api/list/'+page, onResponse);
 }
 
+function pagerInit(pager) {
+	console.log(pager);
+	var html = '';
+	html += '<li class="page-item" onclick="init(1);"><i class="page-link fa fa-angle-double-left"></i></li>';
+	html += '<li class="page-item" onclick="init('+pager.prev+');"><i class="page-link fa fa-angle-left"></i></li>';
+	for(var i=pager.grpSt; i<=pager.grpEd; i++) {
+		html += '<li class="page-item '+((i == pager.page) ? 'active' : '')+'" onclick="init('+i+');"><i class="page-link">'+i+'</i></li>';
+	}
+	html += '<li class="page-item" onclick="init('+pager.next+');"><i class="page-link fa fa-angle-right"></i></li>';
+	html += '<li class="page-item" onclick="init('+pager.lastPage+');"><i class="page-link fa fa-angle-double-right"></i></li>';
+	$(".pagination").html(html);
+}
 
 $("#btSave").click(onSave);
 function onSave() {

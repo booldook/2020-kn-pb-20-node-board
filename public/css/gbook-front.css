@@ -14,4 +14,5 @@
 .list-wrapper th:nth-child(2) {width: 20%;}
 .list-wrapper th:nth-child(3) {width: 20%;}
 
-.page-item.active .page-link {color: #fff!important; background-color: #444; border-color: #222;}
+.pagination .page-link {font-style: normal; color: #444; cursor: pointer;}
+.pagination .page-item.active .page-link {color: #fff!important; background-color: #444; border-color: #222;}
