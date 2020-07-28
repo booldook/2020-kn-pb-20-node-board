@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { pool } = require('../modules/mysql-conn');
 const pagerInit = require('../modules/pager-conn');
+const moment = require('moment');
 
 router.get(['/', '/list', '/list/:page'], async (req, res, next) => {
 	let connect, sql, sqlVal, result, pager, jsonResult;
@@ -12,6 +13,9 @@ router.get(['/', '/list', '/list/:page'], async (req, res, next) => {
 		sqlVal = [pager.stRec, pager.cnt];
 		result = await connect.execute(sql, sqlVal);
 		connect.release();
+		result[0].forEach((v) => {
+			v.createdAt = moment(v.createdAt).format('YYYY-MM-DD hh:mm:ss');
+		});
 		jsonResult = { code: 200, pager, lists: result[0] };
 		res.json(jsonResult);
 	}
