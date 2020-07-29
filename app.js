@@ -34,6 +34,7 @@ app.locals.navis = navi;
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 
+
 /*************** 라우터 세팅 *****************/
 app.use('/', express.static(publicPath));
 app.use('/gbook', gbookRouter);

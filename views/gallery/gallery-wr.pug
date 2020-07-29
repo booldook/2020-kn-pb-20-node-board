@@ -4,13 +4,28 @@ block content
 		h1.title= title
 			hr
 			small MySQL, Nodejs-Express를 사용한 갤러리 입니다.
-	form(name="galleryForm" method="post" action="/gallery/save" onsubmit="return onGallerySubmit(this)")
+	form(name="galleryForm" method="post" action="/gallery/save" onsubmit="return onGallerySubmit(this)" enctype="multipart/form-data")
 		ul.wr-wrap
 			li.wr
-				.wr-title 제목
+				.wr-title.def 제목
 				.wr-cont
 					input.form-control(type="text" name="title" placeholder="제목")
 			li.wr
-				.wr-title 작성자
+				.wr-title.def 작성자
 				.wr-cont
-					input.form-control(type="text" name="writer" placeholder="작성자" style="max-width: 200px;")
+					input.form-control(type="text" name="writer" placeholder="작성자")
+			li.wr
+				.wr-title 내용
+				.wr-cont
+					textarea.form-control(name="content" placeholder="내용")
+			li.wr
+				.wr-title 이미지 1
+				.wr-cont
+					input.form-control-file(type="file" name="upfile" placeholder="첨부파일")
+			li.wr
+				.wr-title 이미지 2
+				.wr-cont
+					input.form-control-file(type="file" name="upfile2" placeholder="첨부파일")
+			li.wr-bts
+				button.btn.btn-primary(type="submit") 저장
+				button.btn.btn-info(type="reset") 다시작성
