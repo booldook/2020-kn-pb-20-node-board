@@ -12,10 +12,11 @@ const publicPath = path.join(__dirname, './public'); // 'c:\...\public'
 const viewsPath = path.join(__dirname, './views');
 
 /*************** 라우터 *****************/
-const gbookRouter = require('./router/gbook');
-const gbookRouterApi = require('./router/gbook-api');
-const boardRouter = require('./router/board');
-const memberRouter = require('./router/member');
+const gbookRouter = require('./router/gbook-router');
+const gbookRouterApi = require('./router/gbook-api-router');
+const boardRouter = require('./router/board-router');
+const galleryRouter = require('./router/gallery-router');
+const memberRouter = require('./router/member-router');
 
 /*************** 서버실행 *****************/
 app.listen(process.env.PORT, () => { 
@@ -38,6 +39,7 @@ app.use('/', express.static(publicPath));
 app.use('/gbook', gbookRouter);
 app.use('/gbook/api', gbookRouterApi);
 app.use('/board', boardRouter);
+app.use('/gallery', galleryRouter);
 app.use('/member', memberRouter);
 
 /*************** 오류 처리 *****************/
