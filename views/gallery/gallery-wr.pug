@@ -1,0 +1,16 @@
+extends ../layout/default.pug
+block content
+	.title-wrap
+		h1.title= title
+			hr
+			small MySQL, Nodejs-Express를 사용한 갤러리 입니다.
+	form(name="galleryForm" method="post" action="/gallery/save" onsubmit="return onGallerySubmit(this)")
+		ul.wr-wrap
+			li.wr
+				.wr-title 제목
+				.wr-cont
+					input.form-control(type="text" name="title" placeholder="제목")
+			li.wr
+				.wr-title 작성자
+				.wr-cont
+					input.form-control(type="text" name="writer" placeholder="작성자" style="max-width: 200px;")

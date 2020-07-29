@@ -1,12 +1,14 @@
 const express = require('express');
 const router = express.Router();
+const pug = {headTitle: "Node/Express 갤러리", css: "gallery", js: "gallery"};
 
 router.get(['/', '/list', '/list/:page'], (req, res, next) => {
 	res.send("리스트");
 });
 
-router.post(['/wr', '/wr/:id'], (req, res, next) => {
-	res.send("글작성");
+router.get(['/wr', '/wr/:id'], (req, res, next) => {
+	pug.title = '갤러리 등록';
+	res.render('gallery/gallery-wr.pug', pug);
 });
 
 router.get('/view/:id', (req, res, next) => {

@@ -1,0 +1,5 @@
+/****************** 갤러리 작성/수정 *******************/
+.wr-wrap {}
+.wr-wrap > .wr {display: flex; border-bottom: 1px solid #ccc;}
+.wr-wrap .wr-title {flex: 20% 0 0; padding: 1rem;}
+.wr-wrap .wr-cont {flex: 80% 0 0; padding: 1rem;}
