@@ -4,11 +4,16 @@ const path = require('path');
 const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
 
+/*
+// fs.Promises 사용하기
+const { promisify } = require('util');
+const mkdir = promisify(fs.mkdir);
+*/
+
 // req, file: 사용자가 업로드한 파일, cb: 함수(err, folder명/file명)
 const storage = multer.diskStorage({
 	destination: (req, file, cb) => {
 		const result = makeFolder();
-		console.log(result); 
 		result.err ? cb(err) : cb(null, result.folder);
 	},
 	filename: (req, file, cb) => {
@@ -25,13 +30,13 @@ function makeFolder() {
 	const result = { err: null };
 	let folder = path.join(__dirname, '../storage', moment().format('YYMMDD'));
 	result.folder = folder;
-	if(fs.existsSync(folder)) return result;
-	else {
-		fs.mkdir(folder, (err) => {
-			if(err) result.err = err;
+	if(!fs.existsSync(folder)) {
+		fs.mkdir(folder, (e) => {
+			if(e) result.err = e;
 			return result;
 		});
 	}
+	return result;
 }
 
 
