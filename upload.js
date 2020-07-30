@@ -1,17 +1,25 @@
 const express = require('express');
 const app = express();
 const path = require('path');
+const fs = require('fs');
+const moment = require('moment');
 const multer  = require('multer');
+const { v4: uuidv4 } = require('uuid');
+const { mkdir } = require('fs');
 const storage = multer.diskStorage({
 	destination: function (req, file, cb) {
-		cb(null, path.join(__dirname, '/storage'));
+		let upload = path.join(__dirname, 'storage', moment().format('YYMMDD'));
+		fs.mkdir(upload, (err) => {
+			if(err) console.log(err);
+			else cb(null, upload);
+		});
+		
 	},
 	filename: function (req, file, cb) {
 		cb(null, file.originalname);
 	}
 });
- 
-const upload = multer({ storage: storage })
+const upload = multer({ storage });
 
 app.listen(3001, () => { console.log('http://127.0.0.1:3001'); });
 
