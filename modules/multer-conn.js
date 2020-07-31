@@ -4,6 +4,9 @@ const path = require('path');
 const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
 
+const allowImgExt = ['jpg', 'png', 'jpeg', 'gif'];
+const allowFileExt = ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'hwp', 'pdf', 'txt', 'zip', 'jpg', 'png', 'jpeg', 'gif'];
+
 /*
 // fs.Promises 사용하기
 const { promisify } = require('util');
@@ -17,10 +20,12 @@ const storage = multer.diskStorage({
 		result.err ? cb(err) : cb(null, result.folder);
 	},
 	filename: (req, file, cb) => {
-		cb(null, '파일명');
+		let ext = path.extname(file.originalname); // .jpg, .png ...
+		let saveName = moment().format('YYMMDD') + '-' + uuidv4() + ext;
+		cb(null, saveName);
 	}
 });
-const upload = multer({storage});
+const upload = multer({ storage, limits: { fileSize: 2048000 }, fileFilter });
 
 function makeFolder() {
 	/*
@@ -39,5 +44,13 @@ function makeFolder() {
 	return result;
 }
 
+function fileFilter(req, file, cb) {
+	let ext = path.extname(file.originalname).toLowerCase().substr(1);
+	if(allowImgExt.indexOf(ext) > -1) cb(null, true);
+	else {
+		req.banExt = ext;
+		cb(null, false);
+	}
+}
 
 module.exports = { upload };
