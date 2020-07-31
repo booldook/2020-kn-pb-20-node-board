@@ -5,7 +5,8 @@ const { pool } = require('../modules/mysql-conn');
 const { upload } = require('../modules/multer-conn');
 
 router.get(['/', '/list', '/list/:page'], (req, res, next) => {
-	res.send("리스트");
+	pug.title = '갤러리 리스트';
+	res.render('gallery/gallery-li.pug', pug);
 });
 
 router.get(['/wr', '/wr/:id'], (req, res, next) => {

@@ -1,0 +1,11 @@
+doctype html
+html(lang="ko")
+	head
+		include ../include/head.pug
+		include ../include/masonry.pug
+	body
+		include ../include/header.pug
+		div.wrapper
+			block content
+		include ../include/footer.pug
+		script(src=`/js/${js}.js`)
