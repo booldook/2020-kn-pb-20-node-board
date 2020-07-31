@@ -7,5 +7,9 @@ block content
 	.list-wrapper
 		.grid-stack
 			each v in lists
-				.grid-stack-item.border(data-gs-width="3" data-gs-height="3")
-					img.img(src=`${v.src}`)
+				.grid-stack-item(data-gs-width="3" data-gs-height="3")
+					div.p-2
+						img.img.border(src=`${v.src}`)
+	.my-5.text-center
+		button.btn.btn-primary(onclick='location.href="/gallery/wr";') 작성하기
+
