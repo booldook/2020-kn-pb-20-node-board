@@ -4,9 +4,25 @@ const pug = {headTitle: "Node/Express 갤러리", css: "gallery", js: "gallery"}
 const { pool } = require('../modules/mysql-conn');
 const { upload } = require('../modules/multer-conn');
 
-router.get(['/', '/list', '/list/:page'], (req, res, next) => {
-	pug.title = '갤러리 리스트';
-	res.render('gallery/gallery-li.pug', pug);
+let sql, sqlVal = [], connect, result;
+
+router.get(['/', '/list', '/list/:page'], async (req, res, next) => {
+	pug.title = '갤러리 리스트';	
+	try {
+		sql = 'SELECT * FROM gallery ORDER BY id DESC';
+		connect = await pool.getConnection();
+		result = await connect.execute(sql);
+		connect.release();
+		pug.lists = result[0];
+		for(let v of pug.lists) {
+			v.src = '/upload/' + v.savefile.substr(0, 6) + '/' + v.savefile;
+		}
+		res.render('gallery/gallery-li.pug', pug);
+	}
+	catch(e) {
+		console.log(e);
+		next(e);
+	}
 });
 
 router.get(['/wr', '/wr/:id'], (req, res, next) => {
@@ -27,7 +43,6 @@ router.get('/downlaod/:file', (req, res, next) => {
 });
 
 router.post('/save', upload.array('upfile'), async (req, res, next) => {
-	let sql, sqlVal = [], connect, result;
 	if(req.banExt) {
 		res.send(`<script>alert('${req.banExt} 타입은 업로드 할 수 없습니다.')</script>`);
 	}

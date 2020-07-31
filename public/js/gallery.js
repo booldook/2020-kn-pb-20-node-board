@@ -1,4 +1,6 @@
-var grid = GridStack.init();
+var grid = GridStack.init({
+	animate: true,
+});
 
 
 

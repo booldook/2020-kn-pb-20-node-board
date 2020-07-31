@@ -7,3 +7,5 @@
 .wr-wrap textarea[name='content'] {height: 200px;}
 .wr-wrap .wr-bts {padding: 1rem; text-align: center;}
 .wr-wrap .wr-title.def::after {display: inline-block; content: "*"; color: red; font-weight: bold; margin-left: 1rem;}
+
+/* .grid-stack-item {width: 20%;} */
