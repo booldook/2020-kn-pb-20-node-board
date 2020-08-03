@@ -3,16 +3,20 @@ const router = express.Router();
 const pug = {headTitle: "Node/Express 갤러리", css: "gallery", js: "gallery"};
 const { pool } = require('../modules/mysql-conn');
 const { upload } = require('../modules/multer-conn');
+const pagerInit = require('../modules/pager-conn');
 
-let sql, sqlVal = [], connect, result;
+let sql, sqlVal = [], connect, result, pager;
 
 router.get(['/', '/list', '/list/:page'], async (req, res, next) => {
 	pug.title = '갤러리 리스트';	
 	try {
-		sql = 'SELECT * FROM gallery ORDER BY id DESC';
+		pager = await pagerInit(req, '/gallery/list', 'gallery');
+		sql = 'SELECT * FROM gallery ORDER BY id DESC LIMIT ?, ?';
+		sqlVal = [pager.stRec, pager.cnt];
 		connect = await pool.getConnection();
-		result = await connect.execute(sql);
+		result = await connect.execute(sql, sqlVal);
 		connect.release();
+		pug.pager = pager;
 		pug.lists = result[0];
 		for(let v of pug.lists) {
 			v.src = '/upload/' + v.savefile.substr(0, 6) + '/' + v.savefile;
