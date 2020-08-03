@@ -7,10 +7,9 @@ block content
 				small MySQL, Nodejs-Express를 사용한 갤러리 입니다.
 				button.btn.btn-primary(onclick='location.href="/gallery/wr";') 작성하기
 	.list-wrapper
-		.list-sizer
-		each v in lists
-			.list
-				img.img(src=`${v.src}`)
-
-		
+		.grid-stack
+			each v in lists
+				.grid-stack-item(data-gs-width="3" data-gs-height="3")
+					div.p-2
+						img.img.border(src=`${v.src}`)
 

@@ -1,6 +1,18 @@
-var grid = GridStack.init({
-	animate: true,
+var $grid = $('.list-wrapper').imagesLoaded( function() {
+	$grid.masonry({
+		itemSelector: '.list',
+		columnWidth: '.list-sizer',
+		percentPosition: true
+	});
 });
+
+
+
+/* var grid = GridStack.init({
+	animate: true,
+}); */
+
+
 
 function onGallerySubmit(f) {
 	var title = f.title.value.trim();

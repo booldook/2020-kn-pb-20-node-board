@@ -58,7 +58,6 @@ router.post('/save', upload.array('upfile'), async (req, res, next) => {
 				sqlVal.push(req.files[i].originalname);
 				sqlVal.push(req.files[i].filename);
 			}
-			console.log(sql);
 			const connect = await pool.getConnection();
 			const result = await connect.execute(sql, sqlVal);
 			connect.release();
