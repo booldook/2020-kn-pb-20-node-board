@@ -1,4 +1,6 @@
 var $grid = $('.list-wrapper').imagesLoaded( function() {
+	$(".loader").hide();
+	$grid.css("visibility", "visible");
 	$grid.masonry({
 		itemSelector: '.list',
 		columnWidth: '.list-sizer',
