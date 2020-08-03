@@ -8,6 +8,19 @@ var $grid = $('.list-wrapper').imagesLoaded( function() {
 	});
 });
 
+function onModal(id) {
+	$.get('/gallery/view/'+id, function(r){
+		var src = '/upload/' + r.savefile.substr(0, 6) + '/' + r.savefile;
+		var src2 = '/upload/' + r.savefile2.substr(0, 6) + '/' + r.savefile2;
+		$(".modal-wrapper").find(".def-img").attr("src", src);
+		$(".modal-wrapper").find(".hover-img").attr("src", src2);
+		$(".modal-wrapper").css("display", "flex");
+	});
+}
+
+$(".modal-wrapper .bt-close").click(function(){
+	$(".modal-wrapper").css("display", "none");
+});
 
 
 /* var grid = GridStack.init({

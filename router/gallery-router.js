@@ -43,8 +43,18 @@ router.get(['/wr', '/wr/:id'], (req, res, next) => {
 	res.render('gallery/gallery-wr.pug', pug);
 });
 
-router.get('/view/:id', (req, res, next) => {
-	res.json({ title: "상세보기" });
+router.get('/view/:id', async (req, res, next) => {
+	let id = req.params.id;
+	try {
+		sql = 'SELECT savefile, savefile2 FROM gallery WHERE id=' + id;
+		connect = await pool.getConnection();
+		result = await connect.execute(sql);
+		connect.release();
+		res.json(result[0][0]);
+	}
+	catch(e) {
+		next(e);
+	}
 });
 
 router.get('/rev/:id', (req, res, next) => {
