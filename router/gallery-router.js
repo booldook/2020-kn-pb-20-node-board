@@ -10,6 +10,7 @@ let sql, sqlVal = [], connect, result, pager;
 router.get(['/', '/list', '/list/:page'], async (req, res, next) => {
 	pug.title = '갤러리 리스트';	
 	try {
+		req.query.cnt = req.query.cnt || 15;
 		pager = await pagerInit(req, '/gallery/list', 'gallery');
 		sql = 'SELECT * FROM gallery ORDER BY id DESC LIMIT ?, ?';
 		sqlVal = [pager.stRec, pager.cnt];
@@ -19,11 +20,14 @@ router.get(['/', '/list', '/list/:page'], async (req, res, next) => {
 		pug.pager = pager;
 		pug.lists = result[0];
 		for(let v of pug.lists) {
+			v.src = '//via.placeholder.com/300';
+			v.src2 = v.src;
 			if(v.savefile) {
 				v.src = '/upload/' + v.savefile.substr(0, 6) + '/' + v.savefile;
+				v.src2 = v.src;
 			}
-			else {
-				v.src = '//via.placeholder.com/300';
+			if(v.savefile2) {
+				v.src2 = '/upload/' + v.savefile2.substr(0, 6) + '/' + v.savefile2;
 			}
 		}
 		res.render('gallery/gallery-li.pug', pug);

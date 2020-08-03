@@ -17,6 +17,17 @@
 .list-wrapper .list-sizer {border: none; padding: 0;}
 .list-wrapper .list--width2 {width: 39%;}
 
+.list-wrapper .list {overflow: hidden;}
+.list-wrapper .list:hover .abs-img {left: 0.75rem;}
+.list-wrapper .list:hover .def-img {transform: translateX(-120%);}
+.list-wrapper .list:hover .bottom-box {bottom: 0;}
+.list-wrapper .list .def-img {transition: transform 0.5s;}
+.list-wrapper .list .abs-img {position: absolute; 
+	width: calc(100% - 1.5rem); top: 0.75rem; left: 100%; transition: left 0.5s;}
+.list-wrapper .list .bottom-box {padding: 1rem; background-color: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center; width: 100%; position: absolute; bottom: -50px; color: #f8f8f8; left: 0; transition: bottom 0.35s; transition-delay: 0.5s;}
+.list-wrapper .list .bottom-box i {margin: 0 0.5rem; cursor: pointer;}
+
+
 @media screen and (max-width: 991px) {
 	.list-wrapper .list-sizer, 
 	.list-wrapper .list {width: 24%;}
