@@ -19,7 +19,12 @@ router.get(['/', '/list', '/list/:page'], async (req, res, next) => {
 		pug.pager = pager;
 		pug.lists = result[0];
 		for(let v of pug.lists) {
-			v.src = '/upload/' + v.savefile.substr(0, 6) + '/' + v.savefile;
+			if(v.savefile) {
+				v.src = '/upload/' + v.savefile.substr(0, 6) + '/' + v.savefile;
+			}
+			else {
+				v.src = '//via.placeholder.com/300';
+			}
 		}
 		res.render('gallery/gallery-li.pug', pug);
 	}
