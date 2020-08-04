@@ -22,6 +22,18 @@ $(".modal-wrapper .bt-close").click(function(){
 	$(".modal-wrapper").css("display", "none");
 });
 
+$(".modal-wrapper .bt-def").click(function(){
+	$(".modal-wrapper").find(".def-img").stop().animate({"opacity": 1}, 500);
+	$(".modal-wrapper").find(".hover-img").stop().animate({"opacity": 0}, 500);
+});
+
+$(".modal-wrapper .bt-hover").click(function(){
+	$(".modal-wrapper").find(".def-img").stop().animate({"opacity": 0}, 500);
+	$(".modal-wrapper").find(".hover-img").stop().animate({"opacity": 1}, 500);
+});
+
+
+
 
 /* var grid = GridStack.init({
 	animate: true,
