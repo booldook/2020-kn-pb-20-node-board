@@ -1,9 +1,21 @@
 .modal-wrapper
+	.modal-wing
+		.bt-hide
+			i.fa.fa-arrow-left
+		.tit-wrap
+			div 제목
+			div.title 제목입니다.
+		.writer-wrap
+			div 작성자
+			div.writer 작성자입니다.
+		.content-wrap
+			div 내용
+			div.content 내용입니다.
 	.bt-close
 		i.fa.fa-times
 	.modals
 		.modal-head
-			.bt-info
+			.bt-info(onclick="onDetail();")
 				i.fa.fa-info-circle
 			.bt-download(onclick="onDownload();")
 				i.fa.fa-download

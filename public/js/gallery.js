@@ -10,6 +10,14 @@ var $grid = $('.list-wrapper').imagesLoaded( function() {
 
 var id, seq;
 
+function onDetail() {
+	$(".modal-wing").css({"opacity": 1, "transform": "translateX(0)"});
+}
+
+$(".bt-hide").click(function(){
+	$(".modal-wing").css({"opacity": 0, "transform": "translateX(-500px)"});
+});
+
 function onDownload() {
 	// /gallery/download/3?seq=2, /gallery/download/3?seq=
 	location.href = '/gallery/download/'+id+'?seq='+seq;
@@ -29,6 +37,9 @@ function onModal(idx) {
 			$(".modal-wrapper").find(".hover-img").attr("src", src2);
 			$(".modal-wrapper").find(".bt-hover").show();
 		}
+		$(".modal-wing").find(".title").html(r.title);
+		$(".modal-wing").find(".writer").html(r.writer);
+		$(".modal-wing").find(".content").html(r.content);
 		$(".modal-wrapper").css("display", "flex");
 	});
 }

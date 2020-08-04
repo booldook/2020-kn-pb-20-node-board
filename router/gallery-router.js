@@ -47,7 +47,7 @@ router.get(['/wr', '/wr/:id'], (req, res, next) => {
 router.get('/view/:id', async (req, res, next) => {
 	let id = req.params.id;
 	try {
-		sql = 'SELECT savefile, savefile2 FROM gallery WHERE id=' + id;
+		sql = 'SELECT * FROM gallery WHERE id=' + id;
 		connect = await pool.getConnection();
 		result = await connect.execute(sql);
 		connect.release();
@@ -70,9 +70,11 @@ router.get('/download/:id', async (req, res, next) => {
 		sql = `SELECT savefile${seq}, realfile${seq} FROM gallery WHERE id=${id}`;
 		connect = await pool.getConnection();
 		result = await connect.execute(sql);
-		savefile = result[0][0][`savefile${seq}`];
+		connect.release();
+		savefile = result[0][0][`savefile${seq}`]; // result[0][0]['savefile2'] == result[0][0].savefile2
 		realfile = result[0][0][`realfile${seq}`];
 		savefile = path.join(__dirname, '../storage', savefile.substr(0, 6), savefile);
+		// C:\Users\hi\Documents\임덕규\20.node-board\storage\200731\200731-sdfj-sdjf...jpg
 		res.download(savefile, realfile);
 	}
 	catch(e) {
