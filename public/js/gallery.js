@@ -10,10 +10,17 @@ var $grid = $('.list-wrapper').imagesLoaded( function() {
 
 function onModal(id) {
 	$.get('/gallery/view/'+id, function(r){
-		var src = '/upload/' + r.savefile.substr(0, 6) + '/' + r.savefile;
-		var src2 = '/upload/' + r.savefile2.substr(0, 6) + '/' + r.savefile2;
-		$(".modal-wrapper").find(".def-img").attr("src", src);
-		$(".modal-wrapper").find(".hover-img").attr("src", src2);
+		var src, src2;
+		if(r.savefile) {
+			src = '/upload/' + r.savefile.substr(0, 6) + '/' + r.savefile;
+			$(".modal-wrapper").find(".def-img").attr("src", src);
+			$(".modal-wrapper").find(".bt-def").show();
+		}
+		if(r.savefile2) {
+			src2 = '/upload/' + r.savefile2.substr(0, 6) + '/' + r.savefile2;
+			$(".modal-wrapper").find(".hover-img").attr("src", src2);
+			$(".modal-wrapper").find(".bt-hover").show();
+		}
 		$(".modal-wrapper").css("display", "flex");
 	});
 }
