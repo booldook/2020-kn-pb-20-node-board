@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const path = require('path');
 const pug = {headTitle: "Node/Express 갤러리", css: "gallery", js: "gallery"};
 const { pool } = require('../modules/mysql-conn');
 const { upload } = require('../modules/multer-conn');
@@ -61,8 +62,22 @@ router.get('/rev/:id', (req, res, next) => {
 	res.send("글삭제");
 });
 
-router.get('/downlaod/:file', (req, res, next) => {
-	res.send("다운로드");
+router.get('/download/:id', async (req, res, next) => {
+	let id = req.params.id;
+	let seq = req.query.seq;
+	let sql, connect, result, savefile, realfile;
+	try {
+		sql = `SELECT savefile${seq}, realfile${seq} FROM gallery WHERE id=${id}`;
+		connect = await pool.getConnection();
+		result = await connect.execute(sql);
+		savefile = result[0][0][`savefile${seq}`];
+		realfile = result[0][0][`realfile${seq}`];
+		savefile = path.join(__dirname, '../storage', savefile.substr(0, 6), savefile);
+		res.download(savefile, realfile);
+	}
+	catch(e) {
+		next(e);
+	}
 });
 
 router.post('/save', upload.array('upfile'), async (req, res, next) => {

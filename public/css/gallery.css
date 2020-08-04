@@ -41,6 +41,7 @@ display: none; justify-content: center; align-items: center; top: 0; left: 0; z-
 .modal-wrapper .modal-cont .hover-img {position: absolute; opacity: 0;}
 .modal-wrapper .modal-pager {display: flex; justify-content: center; margin: 1rem 0;}
 .modal-wrapper .modal-pager > i {cursor: pointer; margin: 0.5rem; color: #f8f8f8;}
+.modal-wrapper .modal-pager > i.active {color: red;}
 .modal-wrapper .modal-pager > i:hover {cursor: pointer; margin: 0.5rem; color: #d4ce97;}
 
 .modal-wrapper .modal-head {width: 100%; position: absolute; top: 0; left: 0; display: flex; justify-content: center;}
