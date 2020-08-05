@@ -72,7 +72,14 @@ function onRev(id) {
 
 }
 
-
+/*
+$(".wr-wrap .fa-question").mouseenter(function(){
+	$(this).find("span").css("opacity", 1);
+});
+$(".wr-wrap .fa-question").mouseleave(function(){
+	$(this).find("span").css("opacity", 0);
+});
+*/
 
 /* var grid = GridStack.init({
 	animate: true,

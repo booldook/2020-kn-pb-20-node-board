@@ -9,7 +9,11 @@
 .wr-wrap .wr-title.def::after {display: inline-block; content: "*"; color: red; font-weight: bold; margin-left: 1rem;}
 .wr-wrap .save-img {padding: 0.5rem; border-bottom: 1px solid #ccc; margin-bottom: 1rem;}
 .wr-wrap .save-img div {font-weight: bold; padding: 0.5rem 0; display: flex; align-items: center;}
-.wr-wrap .save-img .fa-times {width: 20px; height: 20px; background-color: #880a0a; color: #f8f8f8;border-radius: 2px; line-height: 20px; text-align: center; margin-left: 0.5rem; cursor: pointer;}
+.wr-wrap .save-img .fa {width: 20px; height: 20px; background-color: #880a0a; color: #f8f8f8;border-radius: 2px; line-height: 20px; text-align: center; margin-left: 0.5rem; cursor: pointer;}
+.wr-wrap .save-img .fa.fa-question {background-color: #0aa0db; position: relative;}
+.wr-wrap .pop-wrap {padding: 0.5rem 0.5rem 0.5rem 1rem; border-radius: 3px; background-color: #444; color: #f8f8f8; position: absolute; margin-left: 1rem; width: 720px; text-align: left; top: -1.5rem; opacity: 0; transition: opacity 0.4s; visibility: hidden;}
+.wr-wrap .pop-wrap::before {display: block; content: ""; width: 10px; height: 10px; background-color: #444; position: absolute; left: -5px; top: calc(50% - 5px); transform: rotate(45deg);}
+.wr-wrap .save-img .fa.fa-question:hover > .pop-wrap {opacity: 1; visibility: visible;}
 
 
 /* .grid-stack-item {width: 20%;} */
