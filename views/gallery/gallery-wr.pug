@@ -23,7 +23,7 @@ block content
 			li.wr
 				.wr-title 이미지 1
 				.wr-cont
-					if list.src
+					if list && list.src
 						.save-img
 							img(src=`${list.src}` style="width: 80px;")
 							div= list.realfile
@@ -32,7 +32,7 @@ block content
 			li.wr
 				.wr-title 이미지 2
 				.wr-cont
-					if list.src2
+					if list && list.src2
 						.save-img
 							img(src=`${list.src2}` style="width: 80px;")
 							div= list.realfile2

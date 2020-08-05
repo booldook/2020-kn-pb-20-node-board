@@ -7,6 +7,10 @@
 .wr-wrap textarea[name='content'] {height: 200px;}
 .wr-wrap .wr-bts {padding: 1rem; text-align: center;}
 .wr-wrap .wr-title.def::after {display: inline-block; content: "*"; color: red; font-weight: bold; margin-left: 1rem;}
+.wr-wrap .save-img {padding: 0.5rem; border-bottom: 1px solid #ccc; margin-bottom: 1rem;}
+.wr-wrap .save-img div {font-weight: bold; padding: 0.5rem 0; display: flex; align-items: center;}
+.wr-wrap .save-img .fa-times {width: 20px; height: 20px; background-color: #880a0a; color: #f8f8f8;border-radius: 2px; line-height: 20px; text-align: center; margin-left: 0.5rem; cursor: pointer;}
+
 
 /* .grid-stack-item {width: 20%;} */
 .pagination {margin: 2rem 0;}
