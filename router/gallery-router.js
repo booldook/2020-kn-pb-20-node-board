@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const path = require('path');
+const fs = require('fs');
 const pug = {headTitle: "Node/Express 갤러리", css: "gallery", js: "gallery"};
 const { pool } = require('../modules/mysql-conn');
 const { upload } = require('../modules/multer-conn');
@@ -23,11 +24,11 @@ router.get(['/', '/list', '/list/:page'], async (req, res, next) => {
 		for(let v of pug.lists) {
 			v.src = '//via.placeholder.com/300';
 			v.src2 = v.src;
-			if(v.savefile) {
+			if(v.savefile || v.savefile == '') {
 				v.src = '/upload/' + v.savefile.substr(0, 6) + '/' + v.savefile;
 				v.src2 = v.src;
 			}
-			if(v.savefile2) {
+			if(v.savefile2 || v.savefile2 == '') {
 				v.src2 = '/upload/' + v.savefile2.substr(0, 6) + '/' + v.savefile2;
 			}
 		}
@@ -129,6 +130,21 @@ router.post('/save', upload.array('upfile'), async (req, res, next) => {
 			next(e);
 		}
 	}
+});
+
+router.get('/api-img/:id', async (req, res, next) => {
+	let id = req.params.id;
+	let n = req.query.n;
+	let file = req.query.file;
+	file = path.join(__dirname, '../storage', file.substr(0, 6), file);
+	sql = `UPDATE gallery SET savefile${n}=NULL, realfile${n}=NULL WHERE id=${id}`;
+	connect = await pool.getConnection();
+	result = await connect.execute(sql);
+	connect.release();
+	fs.unlink(file, (e) => {
+		if(e) res.json({code: 500, error: e});
+		else res.json({code: 200});
+	});
 });
 
 module.exports = router;

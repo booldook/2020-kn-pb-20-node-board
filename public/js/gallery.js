@@ -72,6 +72,20 @@ function onRev(id) {
 
 }
 
+function onImgRev(id, n, file) {
+	if(confirm("이미지를 삭제하시겠습니까?")) {
+		$.get('/gallery/api-img/'+id, {n: n, file: file}, function(r) {
+			if(r.code == 200) {
+				if(n == '') $(".wr-wrap .img1").remove();
+				else $(".wr-wrap .img2").remove();
+			}
+			else {
+				console.log(r.error);
+			}
+		});
+	}
+}
+
 /*
 $(".wr-wrap .fa-question").mouseenter(function(){
 	$(this).find("span").css("opacity", 1);

@@ -24,10 +24,10 @@ block content
 				.wr-title 이미지 1
 				.wr-cont
 					if list && list.src
-						.save-img
+						.save-img.img1
 							img(src=`${list.src}` style="width: 80px;")
 							div= list.realfile
-								i.fa.fa-times(onclick=``)
+								i.fa.fa-times(onclick=`onImgRev(${list.id}, '', '${list.savefile}');`)
 								i.fa.fa-question
 									span.pop-wrap
 										| 1. 첨부이미지를 교체하시려면 기존 이미지를 삭제하지 않고 새로운 이미지만 등록해도 됩니다.
@@ -38,10 +38,10 @@ block content
 				.wr-title 이미지 2
 				.wr-cont
 					if list && list.src2
-						.save-img
+						.save-img.img2
 							img(src=`${list.src2}` style="width: 80px;")
 							div= list.realfile2
-								i.fa.fa-times(onclick=``)
+								i.fa.fa-times(onclick=`onImgRev(${list.id}, '2', '${list.savefile2}');`)
 								i.fa.fa-question
 									span.pop-wrap
 										| 1. 첨부이미지를 교체하시려면 기존 이미지를 삭제하지 않고 새로운 이미지만 등록해도 됩니다.
