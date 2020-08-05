@@ -11,22 +11,32 @@ block content
 			li.wr
 				.wr-title.def 제목
 				.wr-cont
-					input.form-control(type="text" name="title" placeholder="제목")
+					input.form-control(type="text" name="title" value=`${list ? list.title : ''}` placeholder="제목")
 			li.wr
 				.wr-title.def 작성자
 				.wr-cont
-					input.form-control(type="text" name="writer" placeholder="작성자")
+					input.form-control(type="text" name="writer" value=`${list ? list.writer : ''}` placeholder="작성자")
 			li.wr
 				.wr-title 내용
 				.wr-cont
-					textarea.form-control(name="content" placeholder="내용")
+					textarea.form-control(name="content" placeholder="내용")= list ? list.content : ""
 			li.wr
 				.wr-title 이미지 1
 				.wr-cont
+					if list.src
+						.save-img
+							img(src=`${list.src}` style="width: 80px;")
+							div= list.realfile
+								i.fa.fa-times(onclick=``)
 					input.form-control-file(type="file" name="upfile" id="upfile" placeholder="첨부파일")
 			li.wr
 				.wr-title 이미지 2
 				.wr-cont
+					if list.src2
+						.save-img
+							img(src=`${list.src2}` style="width: 80px;")
+							div= list.realfile2
+								i.fa.fa-times(onclick=``)
 					input.form-control-file(type="file" name="upfile" id="upfile2" placeholder="첨부파일")
 			li.wr-bts
 				button.btn.btn-primary(type="submit") 저장

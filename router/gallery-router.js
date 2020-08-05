@@ -43,6 +43,7 @@ router.get(['/wr', '/wr/:id'], async (req, res, next) => {
 	let id = req.params.id;
 	if(!id) {
 		pug.title = '갤러리 등록';
+		pug.list = null;
 	}
 	else {
 		pug.title = '갤러리 수정';
@@ -51,6 +52,12 @@ router.get(['/wr', '/wr/:id'], async (req, res, next) => {
 		result = await connect.execute(sql);
 		connect.release();
 		pug.list = result[0][0];
+		if(pug.list.savefile) {
+			pug.list.src = '/upload/' + pug.list.savefile.substr(0, 6) + '/' + pug.list.savefile;
+		}
+		if(pug.list.savefile2) {
+			pug.list.src2 = '/upload/' + pug.list.savefile2.substr(0, 6) + '/' + pug.list.savefile2;
+		}
 	}
 	res.render('gallery/gallery-wr.pug', pug);
 });
