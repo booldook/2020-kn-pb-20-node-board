@@ -10,12 +10,12 @@ block content
 	.list-wrapper
 		.list-sizer
 		each v in lists
-			.list
+			.list(onclick=`onModal(${v.id});`)
 				img.img.def-img(src=`${v.src}`)
 				img.img.abs-img(src=`${v.src2}`)
-				.bottom-box
-					i.fa.fa-edit
-					i.fa.fa-trash-alt
+				.bottom-box(onclick="event.stopPropagation();")
+					i.fa.fa-edit(onclick=`onChg(${v.id});`)
+					i.fa.fa-trash-alt(onclick=`onRev(${v.id});`)
 					if v.savefile || v.savefile2
 						i.fas.fa-ellipsis-h(onclick=`onModal(${v.id});`)
 	include ../include/pager.pug

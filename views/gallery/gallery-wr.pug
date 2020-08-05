@@ -1,10 +1,12 @@
-extends ../layout/default.pug
+extends ../layout/gallery.layout.pug
 block content
 	.title-wrap
 		h1.title= title
 			hr
 			small MySQL, Nodejs-Express를 사용한 갤러리 입니다.
 	form(name="galleryForm" method="post" action="/gallery/save" onsubmit="return onGallerySubmit(this)" enctype="multipart/form-data")
+		if list
+			input(type="hidden" name="id" value=`${list.id}`)
 		ul.wr-wrap
 			li.wr
 				.wr-title.def 제목

@@ -39,8 +39,19 @@ router.get(['/', '/list', '/list/:page'], async (req, res, next) => {
 	}
 });
 
-router.get(['/wr', '/wr/:id'], (req, res, next) => {
-	pug.title = '갤러리 등록';
+router.get(['/wr', '/wr/:id'], async (req, res, next) => {
+	let id = req.params.id;
+	if(!id) {
+		pug.title = '갤러리 등록';
+	}
+	else {
+		pug.title = '갤러리 수정';
+		sql = 'SELECT * FROM gallery WHERE id='+id;
+		connect = await pool.getConnection();
+		result = await connect.execute(sql);
+		connect.release();
+		pug.list = result[0][0];
+	}
 	res.render('gallery/gallery-wr.pug', pug);
 });
 
@@ -83,6 +94,7 @@ router.get('/download/:id', async (req, res, next) => {
 });
 
 router.post('/save', upload.array('upfile'), async (req, res, next) => {
+	let id = req.body.id;
 	if(req.banExt) {
 		res.send(`<script>alert('${req.banExt} 타입은 업로드 할 수 없습니다.')</script>`);
 	}
@@ -91,13 +103,15 @@ router.post('/save', upload.array('upfile'), async (req, res, next) => {
 			sqlVal[0] = req.body.title;
 			sqlVal[1] = req.body.writer;
 			sqlVal[2] = req.body.content;
-			sql = 'INSERT INTO gallery SET title=?, writer=?, content=?';
+			if(id) sql = 'UPDATE gallery SET title=?, writer=?, content=?';
+			else sql = 'INSERT INTO gallery SET title=?, writer=?, content=?';
 			for(let i in req.files) {
 				if(i == 0) sql += ', realfile=?, savefile=?';
 				else sql += ', realfile'+(Number(i)+1)+'=?, savefile'+(Number(i)+1)+'=?';
 				sqlVal.push(req.files[i].originalname);
 				sqlVal.push(req.files[i].filename);
 			}
+			if(id) sql += '';
 			const connect = await pool.getConnection();
 			const result = await connect.execute(sql, sqlVal);
 			connect.release();

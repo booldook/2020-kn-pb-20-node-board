@@ -64,6 +64,13 @@ $(".modal-wrapper .bt-hover").click(function(){
 	seq = "2";
 });
 
+function onChg(id) {
+	location.href = '/gallery/wr/'+id;
+}
+
+function onRev(id) {
+
+}
 
 
 
