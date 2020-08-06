@@ -86,14 +86,12 @@ router.get('/rev/:id', async (req, res, next) => {
 			savefile = path.join(__dirname, '../storage', savefile.substr(0, 6), savefile);
 			fs.unlink(savefile, (e) => {
 				if(e) res.json({code: 500, error: e});
-				else res.json({code: 200});
 			});
 		}
 		if(savefile2) {
 			savefile2 = path.join(__dirname, '../storage', savefile2.substr(0, 6), savefile2);
 			fs.unlink(savefile2, (e) => {
 				if(e) res.json({code: 500, error: e});
-				else res.json({code: 200});
 			});
 		}
 		sql = 'DELETE FROM gallery WHERE id='+id;

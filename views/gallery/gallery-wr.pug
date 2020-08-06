@@ -7,6 +7,8 @@ block content
 	form(name="galleryForm" method="post" action="/gallery/save" onsubmit="return onGallerySubmit(this)" enctype="multipart/form-data")
 		if list && list.id
 			input(type="hidden" name="id" value=`${list.id}`)
+			input(type="hidden" name="savefile" value=`${list.savefile}`)
+			input(type="hidden" name="savefile2" value=`${list.savefile2}`)
 		ul.wr-wrap
 			li.wr
 				.wr-title.def 제목

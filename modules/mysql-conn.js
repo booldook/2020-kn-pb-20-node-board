@@ -14,4 +14,12 @@ const mysqlErr = (err) => {
 	return error;
 }
 
-module.exports = { pool, mysqlErr };
+const fileRev = (filename) => {
+
+};
+
+const queryExecute = (sql, sqlVal) => {
+
+};
+
+module.exports = { pool, mysqlErr, fileRev, queryExecute };
