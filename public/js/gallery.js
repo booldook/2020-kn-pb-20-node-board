@@ -78,8 +78,14 @@ function onImgRev(id, n, file) {
 	if(confirm("이미지를 삭제하시겠습니까?")) {
 		$.get('/gallery/api-img/'+id, {n: n, file: file}, function(r) {
 			if(r.code == 200) {
-				if(n == '') $(".wr-wrap .img1").remove();
-				else $(".wr-wrap .img2").remove();
+				if(n == '') {
+					$(".wr-wrap .img1").remove();
+					$("input[name='savefile']").val('');
+				}
+				else {
+					$(".wr-wrap .img2").remove();
+					$("input[name='savefile2']").val('');
+				}
 			}
 			else {
 				console.log(r.error);
