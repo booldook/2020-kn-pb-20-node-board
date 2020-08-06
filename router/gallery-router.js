@@ -101,7 +101,7 @@ router.get('/download/:id', async (req, res, next) => {
 	}
 });
 
-router.post('/save', upload.array('upfile'), async (req, res, next) => {
+router.post('/save', upload.fields([{name: 'upfile'}, {name: 'upfile2'}]), async (req, res, next) => {
 	let id = req.body.id;
 	if(req.banExt) {
 		res.send(`<script>alert('${req.banExt} 타입은 업로드 할 수 없습니다.')</script>`);
@@ -113,20 +113,22 @@ router.post('/save', upload.array('upfile'), async (req, res, next) => {
 			sqlVal[2] = req.body.content;
 			if(id) sql = 'UPDATE gallery SET title=?, writer=?, content=?';
 			else sql = 'INSERT INTO gallery SET title=?, writer=?, content=?';
-			for(let i in req.files) {
-				if(i == 0) sql += ', realfile=?, savefile=?';
-				else sql += ', realfile'+(Number(i)+1)+'=?, savefile'+(Number(i)+1)+'=?';
-				sqlVal.push(req.files[i].originalname);
-				sqlVal.push(req.files[i].filename);
+			if(req.files['upfile']) {
+				sql += ', realfile=?, savefile=?';
+				sqlVal.push(req.files['upfile'][0].originalname);
+				sqlVal.push(req.files['upfile'][0].filename);
 			}
-			if(id) sql += '';
+			if(req.files['upfile2']) {
+				sql += ', realfile2=?, savefile2=?';
+				sqlVal.push(req.files['upfile2'][0].originalname);
+				sqlVal.push(req.files['upfile2'][0].filename);
+			}
 			const connect = await pool.getConnection();
 			const result = await connect.execute(sql, sqlVal);
 			connect.release();
 			res.redirect('/gallery');
 		}
 		catch(e) {
-			console.log(e);
 			next(e);
 		}
 	}

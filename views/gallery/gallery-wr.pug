@@ -5,21 +5,21 @@ block content
 			hr
 			small MySQL, Nodejs-Express를 사용한 갤러리 입니다.
 	form(name="galleryForm" method="post" action="/gallery/save" onsubmit="return onGallerySubmit(this)" enctype="multipart/form-data")
-		if list
+		if list && list.id
 			input(type="hidden" name="id" value=`${list.id}`)
 		ul.wr-wrap
 			li.wr
 				.wr-title.def 제목
 				.wr-cont
-					input.form-control(type="text" name="title" value=`${list ? list.title : ''}` placeholder="제목")
+					input.form-control(type="text" name="title" value=`${list && list.title ? list.title : ''}` placeholder="제목")
 			li.wr
 				.wr-title.def 작성자
 				.wr-cont
-					input.form-control(type="text" name="writer" value=`${list ? list.writer : ''}` placeholder="작성자")
+					input.form-control(type="text" name="writer" value=`${list && list.writer ? list.writer : ''}` placeholder="작성자")
 			li.wr
 				.wr-title 내용
 				.wr-cont
-					textarea.form-control(name="content" placeholder="내용")= list ? list.content : ""
+					textarea.form-control(name="content" placeholder="내용")= list && list.content ? list.content : ""
 			li.wr
 				.wr-title 이미지 1
 				.wr-cont
@@ -47,7 +47,7 @@ block content
 										| 1. 첨부이미지를 교체하시려면 기존 이미지를 삭제하지 않고 새로운 이미지만 등록해도 됩니다.
 										br
 										| 2. 첨부이미지만 삭제하시려면 x를 클릭하여 삭제하시면 됩니다.
-					input.form-control-file(type="file" name="upfile" id="upfile2" placeholder="첨부파일")
+					input.form-control-file(type="file" name="upfile2" id="upfile2" placeholder="첨부파일")
 			li.wr-bts
 				button.btn.btn-primary(type="submit") 저장
 				button.btn.btn-info(type="reset") 다시작성
