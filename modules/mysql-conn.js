@@ -20,7 +20,7 @@ const fileRev = (filename) => {
 	return new Promise((resolve, reject) => {
 		let file = storagePath(filename);
 		fs.unlink(file, (e) => {
-			e ? reject(e) : resolve();
+			e ? reject(e) : resolve({code: 200});
 		});
 	});
 };

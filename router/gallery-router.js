@@ -3,7 +3,7 @@ const router = express.Router();
 const path = require('path');
 const fs = require('fs');
 const pug = {headTitle: "Node/Express 갤러리", css: "gallery", js: "gallery"};
-const { pool, mysqlErr, queryExecute, fileRev, filePath } = require('../modules/mysql-conn');
+const { pool, mysqlErr, queryExecute, fileRev, uploadPath, storagePath } = require('../modules/mysql-conn');
 const { upload } = require('../modules/multer-conn');
 const pagerInit = require('../modules/pager-conn');
 
@@ -25,11 +25,11 @@ router.get(['/', '/list', '/list/:page'], async (req, res, next) => {
 			v.src = '//via.placeholder.com/300';
 			v.src2 = v.src;
 			if(v.savefile || v.savefile == '') {
-				v.src = '/upload/' + v.savefile.substr(0, 6) + '/' + v.savefile;
+				v.src = uploadPath(v.savefile);
 				v.src2 = v.src;
 			}
 			if(v.savefile2 || v.savefile2 == '') {
-				v.src2 = '/upload/' + v.savefile2.substr(0, 6) + '/' + v.savefile2;
+				v.src2 = uploadPath(v.savefile2);
 			}
 		}
 		res.render('gallery/gallery-li.pug', pug);
@@ -54,10 +54,10 @@ router.get(['/wr', '/wr/:id'], async (req, res, next) => {
 		connect.release();
 		pug.list = result[0][0];
 		if(pug.list.savefile) {
-			pug.list.src = '/upload/' + pug.list.savefile.substr(0, 6) + '/' + pug.list.savefile;
+			pug.list.src = uploadPath(pug.list.savefile);
 		}
 		if(pug.list.savefile2) {
-			pug.list.src2 = '/upload/' + pug.list.savefile2.substr(0, 6) + '/' + pug.list.savefile2;
+			pug.list.src2 = uploadPath(pug.list.savefile2);
 		}
 	}
 	res.render('gallery/gallery-wr.pug', pug);
@@ -82,18 +82,8 @@ router.get('/rev/:id', async (req, res, next) => {
 		let id = req.params.id;
 		let savefile = req.query.savefile;
 		let savefile2 = req.query.savefile2;
-		if(savefile) {
-			savefile = path.join(__dirname, '../storage', savefile.substr(0, 6), savefile);
-			fs.unlink(savefile, (e) => {
-				if(e) res.json({code: 500, error: e});
-			});
-		}
-		if(savefile2) {
-			savefile2 = path.join(__dirname, '../storage', savefile2.substr(0, 6), savefile2);
-			fs.unlink(savefile2, (e) => {
-				if(e) res.json({code: 500, error: e});
-			});
-		}
+		if(savefile) await fileRev(savefile);
+		if(savefile2) await fileRev(savefile2);
 		sql = 'DELETE FROM gallery WHERE id='+id;
 		connect = await pool.getConnection();
 		result = await connect.execute(sql);
@@ -116,7 +106,7 @@ router.get('/download/:id', async (req, res, next) => {
 		connect.release();
 		savefile = result[0][0][`savefile${seq}`]; // result[0][0]['savefile2'] == result[0][0].savefile2
 		realfile = result[0][0][`realfile${seq}`];
-		savefile = path.join(__dirname, '../storage', savefile.substr(0, 6), savefile);
+		savefile = storagePath(savefile);
 		// C:\Users\hi\Documents\임덕규\20.node-board\storage\200731\200731-sdfj-sdjf...jpg
 		res.download(savefile, realfile);
 	}
@@ -126,23 +116,25 @@ router.get('/download/:id', async (req, res, next) => {
 });
 
 router.post('/save', upload.fields([{name: 'upfile'}, {name: 'upfile2'}]), async (req, res, next) => {
-	let id = req.body.id;
+	let { id, savefile, savefile2, title, writer, content } = req.body;
 	if(req.banExt) {
 		res.send(`<script>alert('${req.banExt} 타입은 업로드 할 수 없습니다.')</script>`);
 	}
 	else {
 		try {
-			sqlVal[0] = req.body.title;
-			sqlVal[1] = req.body.writer;
-			sqlVal[2] = req.body.content;
+			sqlVal[0] = title;
+			sqlVal[1] = writer;
+			sqlVal[2] = content;
 			if(id) sql = 'UPDATE gallery SET title=?, writer=?, content=?';
 			else sql = 'INSERT INTO gallery SET title=?, writer=?, content=?';
 			if(req.files['upfile']) {
+				if(id && savefile) await fileRev(savefile);
 				sql += ', realfile=?, savefile=?';
 				sqlVal.push(req.files['upfile'][0].originalname);
 				sqlVal.push(req.files['upfile'][0].filename);
 			}
 			if(req.files['upfile2']) {
+				if(id && savefile2) await fileRev(savefile2);
 				sql += ', realfile2=?, savefile2=?';
 				sqlVal.push(req.files['upfile2'][0].originalname);
 				sqlVal.push(req.files['upfile2'][0].filename);
@@ -160,18 +152,20 @@ router.post('/save', upload.fields([{name: 'upfile'}, {name: 'upfile2'}]), async
 });
 
 router.get('/api-img/:id', async (req, res, next) => {
-	let id = req.params.id;
-	let n = req.query.n;
-	let file = req.query.file;
-	file = path.join(__dirname, '../storage', file.substr(0, 6), file);
-	sql = `UPDATE gallery SET savefile${n}=NULL, realfile${n}=NULL WHERE id=${id}`;
-	connect = await pool.getConnection();
-	result = await connect.execute(sql);
-	connect.release();
-	fs.unlink(file, (e) => {
-		if(e) res.json({code: 500, error: e});
-		else res.json({code: 200});
-	});
+	try {
+		let id = req.params.id;
+		let n = req.query.n;
+		let file = req.query.file;
+		sql = `UPDATE gallery SET savefile${n}=NULL, realfile${n}=NULL WHERE id=${id}`;
+		connect = await pool.getConnection();
+		result = await connect.execute(sql);
+		connect.release();
+		result = await fileRev(file);
+		res.json(result);
+	}
+	catch(e) {
+		res.json(e);
+	}
 });
 
 module.exports = router;
