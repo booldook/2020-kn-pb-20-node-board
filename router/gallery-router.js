@@ -3,7 +3,7 @@ const router = express.Router();
 const path = require('path');
 const fs = require('fs');
 const pug = {headTitle: "Node/Express 갤러리", css: "gallery", js: "gallery"};
-const { pool } = require('../modules/mysql-conn');
+const { pool, mysqlErr, queryExecute, fileRev, filePath } = require('../modules/mysql-conn');
 const { upload } = require('../modules/multer-conn');
 const pagerInit = require('../modules/pager-conn');
 
