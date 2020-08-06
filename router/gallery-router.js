@@ -77,8 +77,18 @@ router.get('/view/:id', async (req, res, next) => {
 	}
 });
 
-router.get('/rev/:id', (req, res, next) => {
-	res.send("글삭제");
+router.get('/rev/:id', async (req, res, next) => {
+	try {
+		let id = req.params.id;
+		sql = 'DELETE FROM gallery WHERE id='+id;
+		connect = await pool.getConnection();
+		result = await connect.execute(sql);
+		connect.release();
+		res.redirect('/gallery');
+	}
+	catch(e) {
+		next(e);
+	}
 });
 
 router.get('/download/:id', async (req, res, next) => {
