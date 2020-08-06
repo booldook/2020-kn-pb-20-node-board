@@ -123,6 +123,7 @@ router.post('/save', upload.fields([{name: 'upfile'}, {name: 'upfile2'}]), async
 				sqlVal.push(req.files['upfile2'][0].originalname);
 				sqlVal.push(req.files['upfile2'][0].filename);
 			}
+			if(id) sql += ' WHERE id='+id;
 			const connect = await pool.getConnection();
 			const result = await connect.execute(sql, sqlVal);
 			connect.release();
