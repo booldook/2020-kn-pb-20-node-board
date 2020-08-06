@@ -7,7 +7,7 @@ const { pool, mysqlErr, queryExecute, fileRev, uploadPath, storagePath } = requi
 const { upload } = require('../modules/multer-conn');
 const pagerInit = require('../modules/pager-conn');
 
-let sql, sqlVal = [], connect, result, pager;
+let sql, sqlVal = [], result, pager;
 
 router.get(['/', '/list', '/list/:page'], async (req, res, next) => {
 	pug.title = '갤러리 리스트';	
@@ -16,11 +16,9 @@ router.get(['/', '/list', '/list/:page'], async (req, res, next) => {
 		pager = await pagerInit(req, '/gallery/list', 'gallery');
 		sql = 'SELECT * FROM gallery ORDER BY id DESC LIMIT ?, ?';
 		sqlVal = [pager.stRec, pager.cnt];
-		connect = await pool.getConnection();
-		result = await connect.execute(sql, sqlVal);
-		connect.release();
+		result = await queryExecute(sql, sqlVal);
 		pug.pager = pager;
-		pug.lists = result[0];
+		pug.lists = result;
 		for(let v of pug.lists) {
 			v.src = '//via.placeholder.com/300';
 			v.src2 = v.src;
@@ -35,7 +33,6 @@ router.get(['/', '/list', '/list/:page'], async (req, res, next) => {
 		res.render('gallery/gallery-li.pug', pug);
 	}
 	catch(e) {
-		console.log(e);
 		next(e);
 	}
 });
@@ -49,16 +46,10 @@ router.get(['/wr', '/wr/:id'], async (req, res, next) => {
 	else {
 		pug.title = '갤러리 수정';
 		sql = 'SELECT * FROM gallery WHERE id='+id;
-		connect = await pool.getConnection();
-		result = await connect.execute(sql);
-		connect.release();
-		pug.list = result[0][0];
-		if(pug.list.savefile) {
-			pug.list.src = uploadPath(pug.list.savefile);
-		}
-		if(pug.list.savefile2) {
-			pug.list.src2 = uploadPath(pug.list.savefile2);
-		}
+		result = await queryExecute(sql);
+		pug.list = result[0];
+		if(pug.list.savefile) pug.list.src = uploadPath(pug.list.savefile);
+		if(pug.list.savefile2) pug.list.src2 = uploadPath(pug.list.savefile2);
 	}
 	res.render('gallery/gallery-wr.pug', pug);
 });
@@ -67,13 +58,11 @@ router.get('/view/:id', async (req, res, next) => {
 	let id = req.params.id;
 	try {
 		sql = 'SELECT * FROM gallery WHERE id=' + id;
-		connect = await pool.getConnection();
-		result = await connect.execute(sql);
-		connect.release();
-		res.json(result[0][0]);
+		result = await queryExecute(sql);
+		res.json(result[0]);
 	}
 	catch(e) {
-		next(e);
+		res.json(e);
 	}
 });
 
@@ -85,9 +74,7 @@ router.get('/rev/:id', async (req, res, next) => {
 		if(savefile) await fileRev(savefile);
 		if(savefile2) await fileRev(savefile2);
 		sql = 'DELETE FROM gallery WHERE id='+id;
-		connect = await pool.getConnection();
-		result = await connect.execute(sql);
-		connect.release();
+		result = await queryExecute(sql);
 		res.redirect('/gallery');
 	}
 	catch(e) {
@@ -98,14 +85,12 @@ router.get('/rev/:id', async (req, res, next) => {
 router.get('/download/:id', async (req, res, next) => {
 	let id = req.params.id;
 	let seq = req.query.seq;
-	let sql, connect, result, savefile, realfile;
+	let savefile, realfile;
 	try {
 		sql = `SELECT savefile${seq}, realfile${seq} FROM gallery WHERE id=${id}`;
-		connect = await pool.getConnection();
-		result = await connect.execute(sql);
-		connect.release();
-		savefile = result[0][0][`savefile${seq}`]; // result[0][0]['savefile2'] == result[0][0].savefile2
-		realfile = result[0][0][`realfile${seq}`];
+		result = await queryExecute(sql);
+		savefile = result[0][`savefile${seq}`]; // result[0][0]['savefile2'] == result[0][0].savefile2
+		realfile = result[0][`realfile${seq}`];
 		savefile = storagePath(savefile);
 		// C:\Users\hi\Documents\임덕규\20.node-board\storage\200731\200731-sdfj-sdjf...jpg
 		res.download(savefile, realfile);
@@ -140,9 +125,7 @@ router.post('/save', upload.fields([{name: 'upfile'}, {name: 'upfile2'}]), async
 				sqlVal.push(req.files['upfile2'][0].filename);
 			}
 			if(id) sql += ' WHERE id='+id;
-			const connect = await pool.getConnection();
-			const result = await connect.execute(sql, sqlVal);
-			connect.release();
+			await queryExecute(sql, sqlVal);
 			res.redirect('/gallery');
 		}
 		catch(e) {
@@ -154,12 +137,9 @@ router.post('/save', upload.fields([{name: 'upfile'}, {name: 'upfile2'}]), async
 router.get('/api-img/:id', async (req, res, next) => {
 	try {
 		let id = req.params.id;
-		let n = req.query.n;
-		let file = req.query.file;
+		let { n, file } = req.query;
 		sql = `UPDATE gallery SET savefile${n}=NULL, realfile${n}=NULL WHERE id=${id}`;
-		connect = await pool.getConnection();
-		result = await connect.execute(sql);
-		connect.release();
+		await queryExecute(sql);
 		result = await fileRev(file);
 		res.json(result);
 	}
