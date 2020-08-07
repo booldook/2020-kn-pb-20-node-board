@@ -1,7 +1,42 @@
-extends ../layout/gallery.layout.pug
+extends ../layout/default.pug
 block content
 	.title-wrap
 		h1.title= title
-			hr
 			small MySQL, Nodejs-Express를 사용한 회원관리 입니다.
+			hr
+			small.text-dark 기존 회원이신 분은 우측의 링크를 이용하여 로그인 하시기 바랍니다
+			a.btn.btn-primary.text-light.ml-3(href="/member/login") 회원 로그인 
 	form(name="memberForm" method="post" action="/member/save" onsubmit="return onMemberSubmit(this)")
+		h2.pt-5.pb-3
+			i.fa.fa-edit 
+			span 회원가입
+		table.table.member-join-tb
+			tbody
+				tr.border-bottom
+					td 아이디
+						span.text-danger *
+					td
+						input.form-control(type="text" name="userid" placeholder="아이디")
+				tr.border-bottom
+					td 패스워드
+						span.text-danger *
+					td
+						input.form-control(type="password" name="userpw" placeholder="패스워드")
+				tr.border-bottom
+					td 패스워드 재입력
+						span.text-danger *
+					td
+						input.form-control(type="password" name="userpw2" placeholder="패스워드 재입력")
+				tr.border-bottom
+					td 이름
+						span.text-danger *
+					td
+						input.form-control(type="text" name="username" placeholder="이름")
+				tr.border-bottom
+					td 이메일
+						span
+					td
+						input.form-control(type="text" name="email" placeholder="이메일")
+		.bts.text-center.py-3
+			button.btn.btn-primary 저장
+			button.btn.btn-danger(type="reset") 다시작성
