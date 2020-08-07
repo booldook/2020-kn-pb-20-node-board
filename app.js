@@ -3,8 +3,8 @@ const express = require('express');
 const app = express();
 const path = require('path');
 require('dotenv').config();
-const cookieParser = require('cookie-parser');
-const session = require('express-session');
+const session = require('./modules/session-conn');
+
 
 /*************** 내부모듈 *****************/
 const navi = require('./modules/navi-conn');
@@ -16,12 +16,7 @@ const viewsPath = path.join(__dirname, './views');
 
 /*************** 세션/쿠키 *****************/
 app.set('trust proxy', 1) // trust first proxy
-app.use(session({
-	secret: process.env.SESSION_SALT,
-	resave: false,
-	saveUninitialized: true,
-	cookie: { secure: false }
-}))
+app.use(session);
 
 /*************** 라우터 *****************/
 const gbookRouter = require('./router/gbook-router');
