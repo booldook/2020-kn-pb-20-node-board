@@ -8,14 +8,22 @@ require('dotenv').config();
 const pug = { headTitle: "Node/Express 회원관리", css: "member", js: "member" };
 let sql, sqlVal = [], result;
 
-const useridChk = (req, res, next) => {
+const useridChk = async (req, res, next) => {
 	req.userid = req.params.userid;
 	req.sendData = { code: 500 };
 	if(req.userid.length < 4 || req.userid.length > 16) {
 		req.sendData.msg = '아이디는 4 ~ 16자리 입니다.';
 		res.json(sendData);
 	}
-	else next();
+	else {
+		sql = `SELECT userid FROM member WHERE userid='${req.userid}'`;
+		result = await queryExecute(sql);
+		if(result[0].userid) {
+			req.sendData.msg = `${req.userid}는 사용하실 수 없습니다.`;
+			res.json(sendData);
+		}
+		else next();
+	}
 }
 
 const formChk = (req, res, next) => {
@@ -28,9 +36,7 @@ const formChk = (req, res, next) => {
 }
 
 router.get('/api/idchk/:userid', useridChk, async (req, res, next) => {
-	sql = `SELECT userid FROM member WHERE userid='${req.userid}'`;
-	result = await queryExecute(sql);
-	res.json(result);
+	res.json({code: 200});
 });
 
 router.get('/join', (req, res, next) => {
