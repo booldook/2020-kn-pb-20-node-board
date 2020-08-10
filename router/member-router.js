@@ -19,7 +19,7 @@ const useridChk = async (req, res, next) => {
 		sql = `SELECT userid FROM member WHERE userid='${req.userid}'`;
 		result = await queryExecute(sql);
 		if(result[0] && result[0].userid) {
-			req.sendData.msg = `${req.userid}는 사용하실 수 없습니다.`;
+			req.sendData.msg = `${req.userid}은(는) 사용하실 수 없습니다.`;
 			res.json(req.sendData);
 		}
 		else next();
@@ -36,7 +36,7 @@ const formChk = (req, res, next) => {
 }
 
 router.get('/api/idchk', useridChk, async (req, res, next) => {
-	res.json({code: 200});
+	res.json({code: 200, msg: `${req.userid}은(는) 사용 가능합니다.`});
 });
 
 router.get('/join', (req, res, next) => {
