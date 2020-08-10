@@ -7,6 +7,9 @@ block content
 			small.text-dark 기존 회원이신 분은 우측의 링크를 이용하여 로그인 하시기 바랍니다
 			a.btn.btn-primary.text-light.ml-3(href="/member/login") 회원 로그인 
 	form(name="memberForm" method="post" action="/member/save" onsubmit="return onMemberSubmit(this)")
+		input(type="hidden" name="useridChk")
+		input(type="hidden" name="userpwChk")
+		input(type="hidden" name="usernameChk")
 		h2.pt-5.pb-3
 			i.fa.fa-edit 
 			span 회원가입
@@ -29,6 +32,7 @@ block content
 						span.text-danger *
 					td
 						input.form-control(type="password" name="userpw2" placeholder="패스워드 재입력")
+						span
 				tr.border-bottom
 					td 이름
 						span.text-danger *

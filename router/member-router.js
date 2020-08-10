@@ -31,7 +31,7 @@ const formChk = (req, res, next) => {
 	req.userpw = req.body.userpw;
 	req.username = req.body.username;
 	req.email = req.body.email;
-	if(req.userid && req.userpw && req.username && req.userpw.length >= 8 && req.userpw <= 24 && req.userid.length >= 4 && req.userpw <= 16) next();
+	if(req.userid && req.userpw && req.username && req.userpw.length >= 8 && req.userpw.length <= 24 && req.userid.length >= 4 && req.userpw.length <= 16) next();
 	else res.send(alert('정상적인 접근이 아닙니다.', '/member/join'));
 }
 
