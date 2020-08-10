@@ -44,6 +44,11 @@ router.get('/join', (req, res, next) => {
 	res.render('member/member-join.pug', pug);
 });
 
+router.get('/login', (req, res, next) => {
+	pug.title = "회원로그인";
+	res.render('member/member-login.pug', pug);
+});
+
 router.post('/save', formChk, async (req, res, next) => {
 	sql = 'INSERT INTO member SET userid=?, userpw=?, username=?, email=? ';
 	req.userpw = await bcrypt.hash(req.userpw+process.env.SALT, 7);
