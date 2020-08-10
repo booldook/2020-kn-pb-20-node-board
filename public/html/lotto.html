@@ -1,0 +1,19 @@
+<script>
+	const log = console.log;
+	const SETTING = {
+		name: "LUCKY LOTTO!",
+		count: 6,
+		maxNumber: 45
+	};
+	let { count, maxNumber } = SETTING;
+	
+	const getRandom = maxNumber => Math.floor(Math.random() * maxNumber + 1);
+	const getLotto = (count, maxNumber) => {
+		const numberSet = new Set();
+		while (numberSet.size !== count) numberSet.add(getRandom(maxNumber));
+		return numberSet;
+	}
+
+	log(getLotto(count, maxNumber));
+
+</script>
