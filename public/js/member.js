@@ -64,3 +64,22 @@ $("form[name='memberForm']").find("input[name='username']").blur(function(){
 		$("form[name='memberForm']").find("input[name='usernameChk']").val(true);
 	}
 });
+
+
+function onLoginSubmit(f) {
+	var $userid = $("form[name='loginForm']").find("input[name='userid']"); 
+	var userid = $userid.val().trim(); 
+	var $userpw = $("form[name='loginForm']").find("input[name='userpw']");
+	var userpw = $userpw.val().trim(); 
+	if(userid == "") {
+		alert("아이디를 입력하세요.");
+		$userid.focus();
+		return false;
+	}
+	if(userpw == "") {
+		alert("패스워드를 입력하세요.");
+		$userpw.focus();
+		return false;
+	}
+	return true;
+}
