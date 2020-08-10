@@ -26,3 +26,18 @@ function onMemberSubmit(f) {
 	}
 	return true;
 }
+
+$("input[name='userid']").blur(function(){
+	var $input = $(this);
+	$.get('/member/api/idchk', { userid: $(this).val() }, function(r) {
+		$input.next().remove();
+		if(r.code == 200) {
+			$input.css('border', '1px solid blue');
+			$input.parent().append('<span class="text-primary">'+$input.val()+'은(는) 사용하실 수 있습니다.</span>');
+		}
+		else {
+			$input.css('border', '1px solid red');
+			$input.parent().append('<span class="text-danger">'+r.msg+'</span>');
+		}
+	});
+});

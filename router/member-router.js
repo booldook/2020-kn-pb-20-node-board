@@ -9,18 +9,18 @@ const pug = { headTitle: "Node/Express 회원관리", css: "member", js: "member
 let sql, sqlVal = [], result;
 
 const useridChk = async (req, res, next) => {
-	req.userid = req.params.userid;
+	req.userid = req.query.userid;
 	req.sendData = { code: 500 };
 	if(req.userid.length < 4 || req.userid.length > 16) {
 		req.sendData.msg = '아이디는 4 ~ 16자리 입니다.';
-		res.json(sendData);
+		res.json(req.sendData);
 	}
 	else {
 		sql = `SELECT userid FROM member WHERE userid='${req.userid}'`;
 		result = await queryExecute(sql);
-		if(result[0].userid) {
+		if(result[0] && result[0].userid) {
 			req.sendData.msg = `${req.userid}는 사용하실 수 없습니다.`;
-			res.json(sendData);
+			res.json(req.sendData);
 		}
 		else next();
 	}
@@ -35,7 +35,7 @@ const formChk = (req, res, next) => {
 	else res.send(alert('정상적인 접근이 아닙니다.', '/member/join'));
 }
 
-router.get('/api/idchk/:userid', useridChk, async (req, res, next) => {
+router.get('/api/idchk', useridChk, async (req, res, next) => {
 	res.json({code: 200});
 });
 
