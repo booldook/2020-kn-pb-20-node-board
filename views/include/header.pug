@@ -3,5 +3,13 @@ header.header
 	ul.navi-wrap
 		//- each는 pug에서 지원하는 반복문이다.
 		each v in navis
-			li.navi
-				a(href=`${v.link}`)= v.name
+			if v.login != undefined
+				if users.userid && v.login
+					li.navi
+						a(href=`${v.link}`)= v.name
+				else
+					li.navi
+						a(href=`${v.link}`)= v.name
+			else
+				li.navi
+					a(href=`${v.link}`)= v.name

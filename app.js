@@ -36,6 +36,10 @@ app.set('views', viewsPath);
 app.locals.pretty = true;
 app.locals.headTitle = '노드 게시판';
 app.locals.navis = navi;
+app.use((req, res, next) => {
+	app.locals.users = req.session.user ? req.session.user : {};
+	next();
+});
 
 /***** AJAX/POST 데이터를 json으로 변경 ******/
 app.use(express.json());

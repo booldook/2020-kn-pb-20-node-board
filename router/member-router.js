@@ -64,6 +64,8 @@ router.post('/sign', async (req, res, next) => {
 	if(result[0]) {	// 아이디 존재
 		let match = await bcrypt.compare(userpw + process.env.SALT, result[0].userpw);
 		if(match) {
+			// 세션구현
+			req.session.user = { userid, username: result[0].username, email: result[0].email };
 			res.send(alert('로그인 되었습니다', '/'));
 		}
 		else res.send(alert('아이디 또는 패스워드가 올바르지 않습니다.', '/'));
