@@ -51,14 +51,26 @@ router.get('/login', (req, res, next) => {
 
 router.post('/save', formChk, async (req, res, next) => {
 	sql = 'INSERT INTO member SET userid=?, userpw=?, username=?, email=? ';
-	req.userpw = await bcrypt.hash(req.userpw+process.env.SALT, 7);
+	req.userpw = await bcrypt.hash(req.userpw + process.env.SALT, 7);
 	sqlVal = [req.userid, req.userpw, req.username, req.email];
 	result = await queryExecute(sql, sqlVal);
 	res.send(alert('회원가입이 완료되었습니다. 로그인 해 주세요.', '/member/login'));
 });
 
-router.post('/sign', (req, res, next) => {
-	
+router.post('/sign', async (req, res, next) => {
+	let { userid, userpw } = req.body;
+	sql = 'SELECT * FROM member WHERE userid=?';
+	result = await queryExecute(sql, [userid]);
+	if(result[0]) {	// 아이디 존재
+		let match = await bcrypt.compare(userpw + process.env.SALT, result[0].userpw);
+		if(match) {
+			res.send(alert('로그인 되었습니다', '/'));
+		}
+		else res.send(alert('아이디 또는 패스워드가 올바르지 않습니다.', '/'));
+	}
+	else {	// 아이디 없음
+		res.send(alert('아이디 또는 패스워드가 올바르지 않습니다.', '/'));
+	}
 });
 
 module.exports = router;
