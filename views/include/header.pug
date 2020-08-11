@@ -7,7 +7,7 @@ header.header
 				if users.userid && v.login
 					li.navi
 						a(href=`${v.link}`)= v.name
-				else
+				if !users.userid && !v.login
 					li.navi
 						a(href=`${v.link}`)= v.name
 			else
