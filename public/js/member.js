@@ -66,20 +66,27 @@ $("form[name='memberForm']").find("input[name='username']").blur(function(){
 });
 
 
+var $userid = $("form[name='loginForm']").find("input[name='userid']"); 
+var $userpw = $("form[name='loginForm']").find("input[name='userpw']");
 function onLoginSubmit(f) {
-	var $userid = $("form[name='loginForm']").find("input[name='userid']"); 
 	var userid = $userid.val().trim(); 
-	var $userpw = $("form[name='loginForm']").find("input[name='userpw']");
 	var userpw = $userpw.val().trim(); 
 	if(userid == "") {
-		alert("아이디를 입력하세요.");
+		$userid.next().removeClass("d-none");
 		$userid.focus();
 		return false;
 	}
 	if(userpw == "") {
-		alert("패스워드를 입력하세요.");
+		$userpw.next().removeClass("d-none");
 		$userpw.focus();
 		return false;
 	}
 	return true;
+}
+$userid.keyup(onKeyUp);
+$userpw.keyup(onKeyUp);
+function onKeyUp() {
+	if($(this).val().trim().length > 0) {
+		$(this).next().addClass("d-none");
+	}
 }

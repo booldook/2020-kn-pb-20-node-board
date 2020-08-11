@@ -54,7 +54,11 @@ router.post('/save', formChk, async (req, res, next) => {
 	req.userpw = await bcrypt.hash(req.userpw+process.env.SALT, 7);
 	sqlVal = [req.userid, req.userpw, req.username, req.email];
 	result = await queryExecute(sql, sqlVal);
-	res.send(alert('회원가입이 완료되었습니다. 로그인 해 주세요.', '/'));
+	res.send(alert('회원가입이 완료되었습니다. 로그인 해 주세요.', '/member/login'));
+});
+
+router.post('/sign', (req, res, next) => {
+	
 });
 
 module.exports = router;
