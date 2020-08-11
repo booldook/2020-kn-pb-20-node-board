@@ -6,7 +6,7 @@ block content
 			small MySQL, Nodejs-Express를 사용한 방명록 입니다.
 	form(name="gbookForm" method="post" action="/gbook/save" onsubmit="return onGbookSubmit(this)")
 		.form-inline.justify-content-between
-			input.form-control.form-control-lg.border-warning(type="text" name="writer" placeholder="작성자" style="flex: 19% 0 0;")
+			input.form-control.form-control-lg.border-warning(type="text" name="writer" placeholder="작성자" style="flex: 19% 0 0;" value=`${user && user.userid ? user.username : ''}`)
 			input.form-control.form-control-lg.border-warning(type="text" name="comment" placeholder="한줄 내용을 넣어주세요." style="flex: 64% 0 0;")
 			button.btn.btn-lg.btn-warning(style="flex: 14% 0 0;") 방명록 작성
 	table.list-wrapper.table.table-bordered.table-hover.my-5

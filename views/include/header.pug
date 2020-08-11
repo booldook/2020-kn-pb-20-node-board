@@ -4,10 +4,10 @@ header.header
 		//- each는 pug에서 지원하는 반복문이다.
 		each v in navis
 			if v.login != undefined
-				if users.userid && v.login
+				if user.userid && v.login
 					li.navi
 						a(href=`${v.link}`)= v.name
-				if !users.userid && !v.login
+				if !user.userid && !v.login
 					li.navi
 						a(href=`${v.link}`)= v.name
 			else

@@ -37,7 +37,7 @@ app.locals.pretty = true;
 app.locals.headTitle = '노드 게시판';
 app.locals.navis = navi;
 app.use((req, res, next) => {
-	app.locals.users = req.session.user ? req.session.user : {};
+	app.locals.user = req.session.user ? req.session.user : {};
 	next();
 });
 
