@@ -7,6 +7,7 @@ const { pool, mysqlErr, queryExecute, fileRev, uploadPath, storagePath } = requi
 const { upload } = require('../modules/multer-conn');
 const pagerInit = require('../modules/pager-conn');
 const { isAdmin, isUser, isUserApi, isGuest } = require('../modules/auth');
+const { alert } = require('../modules/util');
 
 let sql, sqlVal = [], result, pager;
 
@@ -74,9 +75,10 @@ router.get('/rev/:id', isUser, async (req, res, next) => {
 		let savefile2 = req.query.savefile2;
 		if(savefile) await fileRev(savefile);
 		if(savefile2) await fileRev(savefile2);
-		sql = 'DELETE FROM gallery WHERE id='+id;
+		sql = `DELETE FROM gallery WHERE id=${id} AND uid=${req.session.user.id}`;
 		result = await queryExecute(sql);
-		res.redirect('/gallery');
+		if(result.affectedRows > 0) res.redirect('/gallery');
+		else res.send(alert('본인의 글만 삭제하실 수 있습니다.'), '/');
 	}
 	catch(e) {
 		next(e);
@@ -101,7 +103,9 @@ router.get('/download/:id', async (req, res, next) => {
 	}
 });
 
+
 router.post('/save', isUser, upload.fields([{name: 'upfile'}, {name: 'upfile2'}]), async (req, res, next) => {
+	sqlVal = [];
 	let { id, savefile, savefile2, title, writer, content } = req.body;
 	if(req.banExt) {
 		res.send(`<script>alert('${req.banExt} 타입은 업로드 할 수 없습니다.')</script>`);
@@ -111,9 +115,8 @@ router.post('/save', isUser, upload.fields([{name: 'upfile'}, {name: 'upfile2'}]
 			sqlVal[0] = title;
 			sqlVal[1] = writer;
 			sqlVal[2] = content;
-			sqlVal[3] = req.session.user.id;
 			if(id) sql = 'UPDATE gallery SET title=?, writer=?, content=?';
-			else sql = 'INSERT INTO gallery SET title=?, writer=?, content=?, uid=?';
+			else sql = 'INSERT INTO gallery SET title=?, writer=?, content=?';
 			if(req.files['upfile']) {
 				if(id && savefile) await fileRev(savefile);
 				sql += ', realfile=?, savefile=?';
@@ -126,9 +129,12 @@ router.post('/save', isUser, upload.fields([{name: 'upfile'}, {name: 'upfile2'}]
 				sqlVal.push(req.files['upfile2'][0].originalname);
 				sqlVal.push(req.files['upfile2'][0].filename);
 			}
+			sqlVal.push(req.session.user.id);
 			if(id) sql += ' WHERE uid=? AND id='+id;
+			else sql += ', uid=?';
 			result = await queryExecute(sql, sqlVal);
-			res.redirect('/gallery');
+			if(result.affectedRows > 0) res.redirect('/gallery');
+			else res.send(alert('본인의 글만 수정하실 수 있습니다.'), '/');
 		}
 		catch(e) {
 			next(e);
@@ -140,10 +146,15 @@ router.get('/api-img/:id', isUserApi, async (req, res, next) => {
 	try {
 		let id = req.params.id;
 		let { n, file } = req.query;
-		sql = `UPDATE gallery SET savefile${n}=NULL, realfile${n}=NULL WHERE id=${id}`;
-		await queryExecute(sql);
-		result = await fileRev(file);
-		res.json(result);
+		sql = `UPDATE gallery SET savefile${n}=NULL, realfile${n}=NULL WHERE id=${id} AND uid=${req.session.user.id}`;
+		result = await queryExecute(sql);
+		if(result.affectedRows > 0){
+			result = await fileRev(file);
+			res.json({code: 200, result});
+		}
+		else {
+			res.json({error: {code: 500, msg: '본인의 글만 삭제할 수 있습니다.'}});
+		}
 	}
 	catch(e) {
 		res.json(e);
