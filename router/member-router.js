@@ -3,6 +3,7 @@ const router = express.Router();
 const { mysqlErr, queryExecute } = require('../modules/mysql-conn');
 const bcrypt = require('bcrypt');
 const { alert, getIP } = require('../modules/util');
+const { isAdmin, isGuest, isUser } = require('../modules/auth');
 require('dotenv').config();
 
 const pug = { headTitle: "Node/Express 회원관리", css: "member", js: "member" };
@@ -35,21 +36,21 @@ const formChk = (req, res, next) => {
 	else res.send(alert('정상적인 접근이 아닙니다.', '/member/join'));
 }
 
-router.get('/api/idchk', useridChk, async (req, res, next) => {
+router.get('/api/idchk', isGuest, useridChk, async (req, res, next) => {
 	res.json({code: 200, msg: `${req.userid}은(는) 사용 가능합니다.`});
 });
 
-router.get('/join', (req, res, next) => {
+router.get('/join', isGuest, (req, res, next) => {
 	pug.title = "회원가입";
 	res.render('member/member-join.pug', pug);
 });
 
-router.get('/login', (req, res, next) => {
+router.get('/login', isGuest, (req, res, next) => {
 	pug.title = "회원로그인";
 	res.render('member/member-login.pug', pug);
 });
 
-router.post('/save', formChk, async (req, res, next) => {
+router.post('/save', isGuest, formChk, async (req, res, next) => {
 	sql = 'INSERT INTO member SET userid=?, userpw=?, username=?, email=? ';
 	req.userpw = await bcrypt.hash(req.userpw + process.env.SALT, 7);
 	sqlVal = [req.userid, req.userpw, req.username, req.email];
@@ -57,7 +58,7 @@ router.post('/save', formChk, async (req, res, next) => {
 	res.send(alert('회원가입이 완료되었습니다. 로그인 해 주세요.', '/member/login'));
 });
 
-router.post('/sign', async (req, res, next) => {
+router.post('/sign', isGuest, async (req, res, next) => {
 	let { userid, userpw } = req.body;
 	sql = 'SELECT * FROM member WHERE userid=?';
 	result = await queryExecute(sql, [userid]);
@@ -82,7 +83,7 @@ router.post('/sign', async (req, res, next) => {
 	}
 });
 
-router.get('/logout', (req, res, next) => {
+router.get('/logout', isUser, (req, res, next) => {
 	req.session.destroy();
 	res.send(alert('로그아웃 되었습니다.', '/'));
 });

@@ -89,6 +89,7 @@ function onImgRev(id, n, file) {
 			}
 			else {
 				console.log(r.error);
+				alert('회원만 사용하실 수 있습니다. 로그인 후 이용하세요.');
 			}
 		});
 	}

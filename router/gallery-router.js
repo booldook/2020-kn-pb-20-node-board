@@ -6,6 +6,7 @@ const pug = {headTitle: "Node/Express 갤러리", css: "gallery", js: "gallery"}
 const { pool, mysqlErr, queryExecute, fileRev, uploadPath, storagePath } = require('../modules/mysql-conn');
 const { upload } = require('../modules/multer-conn');
 const pagerInit = require('../modules/pager-conn');
+const { isAdmin, isUser, isUserApi, isGuest } = require('../modules/auth');
 
 let sql, sqlVal = [], result, pager;
 
@@ -66,7 +67,7 @@ router.get('/view/:id', async (req, res, next) => {
 	}
 });
 
-router.get('/rev/:id', async (req, res, next) => {
+router.get('/rev/:id', isUser, async (req, res, next) => {
 	try {
 		let id = req.params.id;
 		let savefile = req.query.savefile;
@@ -100,7 +101,7 @@ router.get('/download/:id', async (req, res, next) => {
 	}
 });
 
-router.post('/save', upload.fields([{name: 'upfile'}, {name: 'upfile2'}]), async (req, res, next) => {
+router.post('/save', isUser, upload.fields([{name: 'upfile'}, {name: 'upfile2'}]), async (req, res, next) => {
 	let { id, savefile, savefile2, title, writer, content } = req.body;
 	if(req.banExt) {
 		res.send(`<script>alert('${req.banExt} 타입은 업로드 할 수 없습니다.')</script>`);
@@ -134,7 +135,7 @@ router.post('/save', upload.fields([{name: 'upfile'}, {name: 'upfile2'}]), async
 	}
 });
 
-router.get('/api-img/:id', async (req, res, next) => {
+router.get('/api-img/:id', isUserApi, async (req, res, next) => {
 	try {
 		let id = req.params.id;
 		let { n, file } = req.query;

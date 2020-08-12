@@ -17,7 +17,7 @@ block content
 			li.wr
 				.wr-title.def 작성자
 				.wr-cont
-					input.form-control(type="text" name="writer" value=`${list && list.writer ? list.writer : ''}` placeholder="작성자")
+					input.form-control(type="text" name="writer" value=`${list && list.writer ? list.writer : user && user.username ? user.username : ''}` placeholder="작성자")
 			li.wr
 				.wr-title 내용
 				.wr-cont
