@@ -24,5 +24,5 @@ block content
 					td= v.createdAt
 					td.text-left= v.comment
 						if user && user.grade == 9
-							a(href=`/gbook/rev/${v.id}`).gbook-delete.fa.fa-times.text-danger
+							a(href=`/gbook/rev/${v.id}?page=${pager.page}`).gbook-delete.fa.fa-times.text-danger
 	include ../include/pager.pug

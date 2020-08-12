@@ -3,6 +3,7 @@ const router = express.Router();
 const { pool, mysqlErr, queryExecute } = require('../modules/mysql-conn');
 const moment = require('moment');
 const pagerInit = require('../modules/pager-conn');
+const { alert } = require('../modules/util');
 let sql, sqlVal, result, pager;
 
 // 127.0.0.1:3000/gbook
@@ -34,8 +35,14 @@ router.post('/save', async (req, res, next) => {
 });
 
 router.get('/rev/:id', async (req, res, next) => {
-	let id = req.params.id;
-
+	if(req.session && req.session.grade == 9) {
+		let id = req.params.id;
+		let page = req.query.page;
+		sql = 'DELETE FROM gbook WHERE id='+id;
+		result = await queryExecute(sql);
+		res.redirect('/gbook/list/'+page);
+	}
+	else res.send(alert('권한이 없습니다.', '/'));
 });
 
 module.exports = router;
