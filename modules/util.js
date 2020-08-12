@@ -6,4 +6,6 @@ const alert = (msg, loc) => {
 	</script>`;
 }
 
-module.exports = { alert };
+const getIP = req => req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+
+module.exports = { alert, getIP };

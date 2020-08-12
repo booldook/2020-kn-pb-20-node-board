@@ -4,6 +4,7 @@ const app = express();
 const path = require('path');
 require('dotenv').config();
 const session = require('./modules/session-conn');
+const logger = require('./modules/morgan-conn');
 
 
 /*************** 내부모듈 *****************/
@@ -44,6 +45,10 @@ app.use((req, res, next) => {
 /***** AJAX/POST 데이터를 json으로 변경 ******/
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
+
+
+/***** logger(morgan) Init ******/
+app.use(logger);
 
 
 /*************** 라우터 세팅 *****************/

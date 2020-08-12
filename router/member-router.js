@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { mysqlErr, queryExecute } = require('../modules/mysql-conn');
 const bcrypt = require('bcrypt');
-const { alert } = require('../modules/util');
+const { alert, getIP } = require('../modules/util');
 require('dotenv').config();
 
 const pug = { headTitle: "Node/Express 회원관리", css: "member", js: "member" };
@@ -66,6 +66,8 @@ router.post('/sign', async (req, res, next) => {
 		if(match) {
 			// 세션구현
 			req.session.user = { userid, username: result[0].username, email: result[0].email };
+			sql = 'INSERT INTO loginlog SET uid=?, ip=?'; 
+			result = await queryExecute(sql, [result[0].id, getIP(req)]);
 			res.send(alert('로그인 되었습니다', '/'));
 		}
 		else res.send(alert('아이디 또는 패스워드가 올바르지 않습니다.', '/'));
