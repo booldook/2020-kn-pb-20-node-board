@@ -18,9 +18,12 @@ router.get(['/', '/list', '/list/:page'], async (req, res, next) => {
 		pager = await pagerInit(req, '/gbook/list', 'gbook');
 		sql = 'SELECT * FROM gbook ORDER BY id DESC LIMIT ?, ?';
 		result = await queryExecute(sql, [pager.stRec, pager.cnt]);
-		for(let v of result) v.createdAt = moment(v.createdAt).format('YYYY-MM-DD hh:mm:ss');
-		const pug = { css: 'gbook', js: 'gbook', lists: result, pager };
-		res.render('gbook/gbook.pug', pug);
+		if(result.length > 0) {
+			for(let v of result) v.createdAt = moment(v.createdAt).format('YYYY-MM-DD hh:mm:ss');
+			const pug = { css: 'gbook', js: 'gbook', lists: result, pager };
+			res.render('gbook/gbook.pug', pug);
+		}
+		else res.redirect('/');
 	}
 	catch(e) {
 		next(mysqlErr(e));
@@ -35,7 +38,7 @@ router.post('/save', async (req, res, next) => {
 });
 
 router.get('/rev/:id', async (req, res, next) => {
-	if(req.session && req.session.grade == 9) {
+	if(req.session.user && req.session.user.grade == 9) {
 		let id = req.params.id;
 		let page = req.query.page;
 		sql = 'DELETE FROM gbook WHERE id='+id;
