@@ -65,7 +65,12 @@ router.post('/sign', async (req, res, next) => {
 		let match = await bcrypt.compare(userpw + process.env.SALT, result[0].userpw);
 		if(match) {
 			// 세션구현
-			req.session.user = { userid, username: result[0].username, email: result[0].email };
+			req.session.user = { 
+				userid, 
+				username: result[0].username, 
+				email: result[0].email,
+				grade: result[0].grade 
+			};
 			sql = 'INSERT INTO loginlog SET uid=?, ip=?'; 
 			result = await queryExecute(sql, [result[0].id, getIP(req)]);
 			res.send(alert('로그인 되었습니다', '/'));

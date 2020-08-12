@@ -1,8 +1,9 @@
 
-
-
 .list-wrapper th:nth-child(1) {width: 10%;}
 .list-wrapper th:nth-child(2) {width: 20%;}
 .list-wrapper th:nth-child(3) {width: 20%;}
+
+.list-wrapper td:last-child {position: relative;}
+.list-wrapper td:last-child .gbook-delete {position: absolute; right: 10px; margin-top: 5px; text-decoration: none; cursor: pointer;}
 
 .page-item.active .page-link {color: #fff!important; background-color: #444; border-color: #222;}

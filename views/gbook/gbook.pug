@@ -23,4 +23,6 @@ block content
 					td= v.writer
 					td= v.createdAt
 					td.text-left= v.comment
+						if user && user.grade == 9
+							a(href=`/gbook/rev/${v.id}`).gbook-delete.fa.fa-times.text-danger
 	include ../include/pager.pug
