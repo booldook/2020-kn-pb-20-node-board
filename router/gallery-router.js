@@ -6,7 +6,7 @@ const pug = {headTitle: "Node/Express 갤러리", css: "gallery", js: "gallery"}
 const { pool, mysqlErr, queryExecute, fileRev, uploadPath, storagePath } = require('../modules/mysql-conn');
 const { upload } = require('../modules/multer-conn');
 const pagerInit = require('../modules/pager-conn');
-const { isAdmin, isUser, isUserApi, isGuest } = require('../modules/auth');
+const { isAdmin, isUser, isUserApi, isGuest, isMine } = require('../modules/auth');
 const { alert } = require('../modules/util');
 
 let sql, sqlVal = [], result, pager;
@@ -104,7 +104,7 @@ router.get('/download/:id', async (req, res, next) => {
 });
 
 
-router.post('/save', isUser, upload.fields([{name: 'upfile'}, {name: 'upfile2'}]), async (req, res, next) => {
+router.post('/save', isUser, upload.fields([{name: 'upfile'}, {name: 'upfile2'}]), isMine, async (req, res, next) => {
 	sqlVal = [];
 	let { id, savefile, savefile2, title, writer, content } = req.body;
 	if(req.banExt) {
