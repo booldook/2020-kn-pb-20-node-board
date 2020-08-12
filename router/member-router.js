@@ -68,6 +68,7 @@ router.post('/sign', isGuest, async (req, res, next) => {
 			// 세션구현
 			req.session.user = { 
 				userid, 
+				id: result[0].id,
 				username: result[0].username, 
 				email: result[0].email,
 				grade: result[0].grade 

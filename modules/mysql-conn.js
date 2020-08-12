@@ -38,6 +38,7 @@ const queryExecute = (sql, sqlVal = []) => {
 			resolve(result[0]);
 		}
 		catch(e) {
+			connect.release();
 			reject(e);
 		}
 	});

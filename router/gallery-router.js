@@ -111,8 +111,9 @@ router.post('/save', isUser, upload.fields([{name: 'upfile'}, {name: 'upfile2'}]
 			sqlVal[0] = title;
 			sqlVal[1] = writer;
 			sqlVal[2] = content;
+			sqlVal[3] = req.session.user.id;
 			if(id) sql = 'UPDATE gallery SET title=?, writer=?, content=?';
-			else sql = 'INSERT INTO gallery SET title=?, writer=?, content=?';
+			else sql = 'INSERT INTO gallery SET title=?, writer=?, content=?, uid=?';
 			if(req.files['upfile']) {
 				if(id && savefile) await fileRev(savefile);
 				sql += ', realfile=?, savefile=?';
@@ -125,8 +126,8 @@ router.post('/save', isUser, upload.fields([{name: 'upfile'}, {name: 'upfile2'}]
 				sqlVal.push(req.files['upfile2'][0].originalname);
 				sqlVal.push(req.files['upfile2'][0].filename);
 			}
-			if(id) sql += ' WHERE id='+id;
-			await queryExecute(sql, sqlVal);
+			if(id) sql += ' WHERE uid=? AND id='+id;
+			result = await queryExecute(sql, sqlVal);
 			res.redirect('/gallery');
 		}
 		catch(e) {
