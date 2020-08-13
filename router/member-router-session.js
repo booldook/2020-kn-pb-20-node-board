@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const { mysqlErr, queryExecute } = require('../modules/mysql-conn');
 const bcrypt = require('bcrypt');
-const passport = require('passport');
 const { alert, getIP } = require('../modules/util');
 const { isAdmin, isGuest, isUser } = require('../modules/auth');
 require('dotenv').config();
@@ -60,21 +59,33 @@ router.post('/save', isGuest, formChk, async (req, res, next) => {
 });
 
 router.post('/sign', isGuest, async (req, res, next) => {
-	const done = (err, user, msg) => {
-		if(err) return next(err);
-		if(!user) return res.send(alert(msg, '/'));
-		else {
-			req.login(user, (err) => {
-				if(err) return next(err);
-				else return res.send(alert('로그인 되었습니다.', '/'));
-			});
+	let { userid, userpw } = req.body;
+	sql = 'SELECT * FROM member WHERE userid=?';
+	result = await queryExecute(sql, [userid]);
+	if(result[0]) {	// 아이디 존재
+		let match = await bcrypt.compare(userpw + process.env.SALT, result[0].userpw);
+		if(match) {
+			// 세션구현
+			req.session.user = { 
+				userid, 
+				id: result[0].id,
+				username: result[0].username, 
+				email: result[0].email,
+				grade: result[0].grade 
+			};
+			sql = 'INSERT INTO loginlog SET uid=?, ip=?'; 
+			result = await queryExecute(sql, [result[0].id, getIP(req)]);
+			res.send(alert('로그인 되었습니다', '/'));
 		}
+		else res.send(alert('아이디 또는 패스워드가 올바르지 않습니다.', '/'));
 	}
-	passport.authenticate('local', done)(req, res, next);
+	else {	// 아이디 없음
+		res.send(alert('아이디 또는 패스워드가 올바르지 않습니다.', '/'));
+	}
 });
 
 router.get('/logout', isUser, (req, res, next) => {
-	req.logout();
+	req.session.destroy();
 	res.send(alert('로그아웃 되었습니다.', '/'));
 });
 
