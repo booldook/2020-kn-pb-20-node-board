@@ -22,10 +22,6 @@ const isGuest = (req, res, next) => {
 }
 
 const isMine = async (req, res, next) => {
-	console.log(req.query.id);
-	console.log(req.params.id);
-	console.log(req.body.id);
-	console.log(req.session.user);
 	let id = req.query.id || req.params.id || req.body.id;
 	let uid = req.session.user.id;
 	let sql = `SELECT * FROM gallery WHERE id=${id} AND uid=${uid}`;
