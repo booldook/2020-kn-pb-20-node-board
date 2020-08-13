@@ -80,8 +80,12 @@ router.get('/logout', isUser, (req, res, next) => {
 
 router.get('/kakao', passport.authenticate('kakao'));
 
-router.get('/kakao/cb', (req, res, next) => {
-
+router.get('/kakao/cb', passport.authenticate('kakao', {failureRedirect: '/'}), (req, res, next) => {
+	console.log(req.user);
+	req.login(req.user, (err) => {
+		if(err) next(err);
+		else res.redirect('/');
+	});
 });
 
 module.exports = router;
