@@ -78,4 +78,10 @@ router.get('/logout', isUser, (req, res, next) => {
 	res.send(alert('로그아웃 되었습니다.', '/'));
 });
 
+router.get('/kakao', passport.authenticate('kakao'));
+
+router.get('/kakao/cb', (req, res, next) => {
+
+});
+
 module.exports = router;
