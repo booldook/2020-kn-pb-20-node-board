@@ -16,7 +16,7 @@ router.get(['/', '/list', '/list/:page'], async (req, res, next) => {
 		result[0].forEach((v) => {
 			v.createdAt = moment(v.createdAt).format('YYYY-MM-DD hh:mm:ss');
 		});
-		jsonResult = { code: 200, pager, lists: result[0], user: req.session.user };
+		jsonResult = { code: 200, pager, lists: result[0], user: req.user };
 		res.json(jsonResult);
 	}
 	catch(e) {

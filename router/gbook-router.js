@@ -19,12 +19,9 @@ router.get(['/', '/list', '/list/:page'], async (req, res, next) => {
 		pager = await pagerInit(req, '/gbook/list', 'gbook');
 		sql = 'SELECT * FROM gbook ORDER BY id DESC LIMIT ?, ?';
 		result = await queryExecute(sql, [pager.stRec, pager.cnt]);
-		if(result.length > 0) {
-			for(let v of result) v.createdAt = moment(v.createdAt).format('YYYY-MM-DD hh:mm:ss');
-			const pug = { css: 'gbook', js: 'gbook', lists: result, pager };
-			res.render('gbook/gbook.pug', pug);
-		}
-		else res.redirect('/');
+		for(let v of result) v.createdAt = moment(v.createdAt).format('YYYY-MM-DD hh:mm:ss');
+		const pug = { css: 'gbook', js: 'gbook', lists: result, pager };
+		res.render('gbook/gbook.pug', pug);
 	}
 	catch(e) {
 		next(mysqlErr(e));
