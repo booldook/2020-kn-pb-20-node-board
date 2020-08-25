@@ -25,10 +25,13 @@ const isGuest = (req, res, next) => {
 const isMine = async (req, res, next) => {
 	let id = req.query.id || req.params.id || req.body.id;
 	let uid = req.user.id;
-	let sql = `SELECT * FROM gallery WHERE id=${id} AND uid=${uid}`;
-	let result = await queryExecute(sql);
-	if(result.affectedRows > 0) next();
-	else res.send(alert('본인의 글만 접근할 수 있습니다.', '/'));
+	if(id) {
+		let sql = `SELECT * FROM gallery WHERE id=${id} AND uid=${uid}`;
+		let result = await queryExecute(sql);
+		if(result.affectedRows > 0) next();
+		else res.send(alert('본인의 글만 접근할 수 있습니다.', '/'));
+	}
+	else next();
 }
 
 module.exports = { isAdmin, isUser, isUserApi, isGuest, isMine };

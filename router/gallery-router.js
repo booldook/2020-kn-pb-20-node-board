@@ -104,7 +104,7 @@ router.get('/download/:id', async (req, res, next) => {
 });
 
 
-router.post('/save', isUser, upload.fields([{name: 'upfile'}, {name: 'upfile2'}]), isMine, async (req, res, next) => {
+router.post('/save', isUser, isMine, upload.fields([{name: 'upfile'}, {name: 'upfile2'}]), async (req, res, next) => {
 	sqlVal = [];
 	let { id, savefile, savefile2, title, writer, content } = req.body;
 	if(req.banExt) {
