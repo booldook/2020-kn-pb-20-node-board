@@ -75,7 +75,7 @@ router.get('/rev/:id', isUser, async (req, res, next) => {
 		let savefile2 = req.query.savefile2;
 		if(savefile) await fileRev(savefile);
 		if(savefile2) await fileRev(savefile2);
-		sql = `DELETE FROM gallery WHERE id=${id} AND uid=${req.session.user.id}`;
+		sql = `DELETE FROM gallery WHERE id=${id} AND uid=${req.user.id}`;
 		result = await queryExecute(sql);
 		if(result.affectedRows > 0) res.redirect('/gallery');
 		else res.send(alert('본인의 글만 삭제하실 수 있습니다.'), '/');
@@ -129,7 +129,7 @@ router.post('/save', isUser, isMine, upload.fields([{name: 'upfile'}, {name: 'up
 				sqlVal.push(req.files['upfile2'][0].originalname);
 				sqlVal.push(req.files['upfile2'][0].filename);
 			}
-			sqlVal.push(req.session.user.id);
+			sqlVal.push(req.user.id);
 			if(id) sql += ' WHERE uid=? AND id='+id;
 			else sql += ', uid=?';
 			result = await queryExecute(sql, sqlVal);
@@ -146,7 +146,7 @@ router.get('/api-img/:id', isUserApi, async (req, res, next) => {
 	try {
 		let id = req.params.id;
 		let { n, file } = req.query;
-		sql = `UPDATE gallery SET savefile${n}=NULL, realfile${n}=NULL WHERE id=${id} AND uid=${req.session.user.id}`;
+		sql = `UPDATE gallery SET savefile${n}=NULL, realfile${n}=NULL WHERE id=${id} AND uid=${req.user.id}`;
 		result = await queryExecute(sql);
 		if(result.affectedRows > 0){
 			result = await fileRev(file);
